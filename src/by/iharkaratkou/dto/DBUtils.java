@@ -2,6 +2,8 @@ package by.iharkaratkou.dto;
 
 import java.sql.*;
 
+import by.iharkaratkou.bo.GeneralData;
+
 public class DBUtils {
 	
 	private Connection getConnection(String dbLogin, String dbPassword) throws ClassNotFoundException, SQLException{
@@ -30,21 +32,27 @@ public class DBUtils {
 	}
 	
 	
-	public int insertUser(User user) throws SQLException, ClassNotFoundException{
+	public int insertGeneralData(GeneralData gd) throws SQLException, ClassNotFoundException{
 		
 		boolean res = false;
-		int id = 0;
+		Integer id = 0;
 		String dbLogin = "ihar";
 		String dbPassword = "ihar";
 		
-		String name = user.getName();
-		String surname = user.getSurname();
-		String email = user.getEmail();
-		String password = user.getPassword();
+		String Name = gd.getNAME();
+		String Surname = gd.getSURNAME();
+		String CurPosition = gd.getCURRENT_POST();
+		String CurCompany = gd.getCURRENT_COMPANY();
+		String CurLocation = gd.getCURRENT_LOCATION();
+		String CurBusPhone = gd.getCURRENT_BUS_PHONE();
+		String CurBusMail = gd.getCURRENT_BUSINESS_MAIL();
+		String LinkedIn = gd.getSN_LINKEDIN();
+		String Twitter = gd.getSN_TWITTER();
 		
 		Connection conn = this.getConnection(dbLogin, dbPassword);
 		
-		String insertQuery = "insert into myshop_customers (name,surname,email,password,active) values ('"+ name +"','"+ surname +"','"+ email +"',sha1('"+ password +"'),'no')";
+		String insertQuery = "insert into general_data (NAME,SURNAME,CURRENT_POST,CURRENT_COMPANY,CURRENT_LOCATION,CURRENT_BUS_PHONE,CURRENT_BUSINESS_MAIL,SN_LINKEDIN,SN_TWITTER)"
+				+ " values ('"+ Name +"','"+ Surname +"','"+ CurPosition +"','"+ CurCompany +"','"+ CurLocation +"','"+ CurBusPhone +"','"+ CurBusMail +"','"+ LinkedIn +"','"+ Twitter +"')";
 		String idQuery = "SELECT LAST_INSERT_ID()";
 		
 		res = this.execInsert(conn, insertQuery);
