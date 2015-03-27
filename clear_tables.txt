@@ -1,10 +1,10 @@
 use web_resume;
 delete from COUNTRIES;
-delete from EDUCATION;
+delete from EDUCATIONS;
 delete from EXP_ACTIVITIES;
-delete from EXPERIENCE;
+delete from EXPERIENCES;
 delete from PERSON_COUNTRIES;
 delete from PERSON_LABELS;
 delete from QUALIFICATIONS;
-delete from SERTIFICATION;
+delete from CERTIFICATIONS;
 delete from GENERAL_DATA;

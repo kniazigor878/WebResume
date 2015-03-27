@@ -1,4 +1,4 @@
-package by.iharkaratkou.javautils;
+package by.iharkaratkou.javaUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

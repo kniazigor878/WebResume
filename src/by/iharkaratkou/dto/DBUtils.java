@@ -1,8 +1,12 @@
 package by.iharkaratkou.dto;
 
 import java.sql.*;
+import java.util.ArrayList;
 
+import by.iharkaratkou.bo.Exp_activity;
+import by.iharkaratkou.bo.Experience;
 import by.iharkaratkou.bo.GeneralData;
+import by.iharkaratkou.bo.Qualifications;
 
 public class DBUtils {
 	
@@ -32,7 +36,7 @@ public class DBUtils {
 	}
 	
 	
-	public int insertGeneralData(GeneralData gd) throws SQLException, ClassNotFoundException{
+	public Integer insertGeneralData(GeneralData gd) throws SQLException, ClassNotFoundException{
 		
 		boolean res = false;
 		Integer id = 0;
@@ -59,6 +63,67 @@ public class DBUtils {
 		id = this.execIDSelect(conn, idQuery);
 		
 		return id;
+	}
+	
+	public void insertQualifications(Qualifications qual, Integer id_last_temp) throws SQLException, ClassNotFoundException{
+		
+		boolean res = false;
+		Integer id = 0;
+		String dbLogin = "ihar";
+		String dbPassword = "ihar";
+		
+		ArrayList<String> qualifications = qual.getQualifications();
+		
+		Connection conn = this.getConnection(dbLogin, dbPassword);
+		
+		for(String qualification: qualifications){
+			String insertQuery = "insert into qualifications (GEN_DAT_ID,QUALIFICATION) values ('"+ id_last_temp.toString() +"','"+ qualification +"')";
+			res = this.execInsert(conn, insertQuery);
+		}
+		
+		return;
+	}
+	
+	public Integer insertExperiences(Experience exp, Integer id_last_temp) throws SQLException, ClassNotFoundException{
+		
+		boolean res = false;
+		Integer id = 0;
+		String dbLogin = "ihar";
+		String dbPassword = "ihar";
+		
+		String Position = exp.getPOSITION();
+		String Company = exp.getCOMPANY();
+		String Period = exp.getPERIOD();
+		
+		Connection conn = this.getConnection(dbLogin, dbPassword);
+		
+		String insertQuery = "insert into experiences (GEN_DAT_ID,POSITION,COMPANY,PERIOD) values ('"+ id_last_temp.toString() +"','"+ Position +"','"+ Company +"','"+ Period +"')";
+		String idQuery = "SELECT LAST_INSERT_ID()";
+		
+		res = this.execInsert(conn, insertQuery);
+		id = this.execIDSelect(conn, idQuery);
+		
+		return id;
+	}
+	
+	public void insertExperienceActivities(Exp_activity exp_act, Integer id_exp_temp) throws SQLException, ClassNotFoundException{
+		
+		boolean res = false;
+		String dbLogin = "ihar";
+		String dbPassword = "ihar";
+		
+		ArrayList<String> exp_activities = exp_act.getExp_activities();
+		System.out.println("exp_activities: " + exp_activities);
+		System.out.println("id_exp: " + id_exp_temp);
+		
+		Connection conn = this.getConnection(dbLogin, dbPassword);
+		
+		for(String exp_activity: exp_activities){
+			String insertQuery = "insert into exp_activities (EXP_ID,ACTIVITY) values ('"+ id_exp_temp.toString() +"','"+ exp_activity +"')";
+			res = this.execInsert(conn, insertQuery);
+		}
+		
+		return;
 	}
 	
 /*	public boolean setActive(String id) throws SQLException, ClassNotFoundException{
