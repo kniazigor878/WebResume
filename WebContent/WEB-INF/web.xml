@@ -17,5 +17,12 @@
     <servlet-name>UploadFile</servlet-name>
     <url-pattern>/WebResume/UploadFile</url-pattern>
   </servlet-mapping>
-  
+    <servlet>
+    <servlet-name>FindResume</servlet-name>
+    <servlet-class>by.iharkaratkou.FindResume</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FindResume</servlet-name>
+    <url-pattern>/WebResume/FindResume/*</url-pattern>
+  </servlet-mapping>
 </web-app>

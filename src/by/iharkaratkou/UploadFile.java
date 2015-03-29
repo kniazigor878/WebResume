@@ -1,6 +1,11 @@
 package by.iharkaratkou;
 
+import java.awt.Desktop;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,15 +26,15 @@ import org.apache.commons.io.FilenameUtils;
 public class UploadFile extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
-	String saveFile = "d:/Eclipse_Workspace_luna/upload";
+
+	String saveFile = "d:/eclipse_workspace/upload";
 
 	protected String processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		String filenameTimestamp = "";
-		
+
 		try {
 			boolean ismultipart = ServletFileUpload.isMultipartContent(request);
 			if (!ismultipart) {
@@ -73,7 +78,7 @@ public class UploadFile extends HttpServlet {
 
 	private File checkExist(String fileName) {
 		File f = new File(saveFile + "/" + fileName);
-		//File f = new File("d:\\eclipse_workspace\\upload\\LICENSE");
+		// File f = new File("d:\\eclipse_workspace\\upload\\LICENSE");
 		System.out.println("fileName: " + saveFile + "/" + fileName);
 		System.out.println("f.exists(): " + f.exists());
 
@@ -87,27 +92,39 @@ public class UploadFile extends HttpServlet {
 		return f;
 	}
 
-	
+	public static void openWebpage(URI uri) {
+		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop()
+				: null;
+		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+			try {
+				desktop.browse(uri);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doGet");
-		String filenameTimestamp = processRequest(request, response);
-		ExcelParser exlParser = new ExcelParser();
-		exlParser.parseExcelToDatabase(filenameTimestamp);
-		
+		doPost(request,response);
 
 	}
 
-	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doPost");
 		String filenameTimestamp = processRequest(request, response);
 		ExcelParser exlParser = new ExcelParser();
-		exlParser.parseExcelToDatabase(filenameTimestamp);
+		Integer id_last_temp = exlParser.parseExcelToDatabase(filenameTimestamp);
+		URL myURL = new URL("http://localhost:8080/WebResume/FindResume/"
+				+ id_last_temp);
+		try {
+			openWebpage(myURL.toURI());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 	}
 
-	
 	public String getServletInfo() {
 		return "Short description";
 	}

@@ -14,6 +14,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import by.iharkaratkou.bo.Certification;
+import by.iharkaratkou.bo.Country;
+import by.iharkaratkou.bo.Education;
 import by.iharkaratkou.bo.Exp_activity;
 import by.iharkaratkou.bo.Experience;
 import by.iharkaratkou.bo.GeneralData;
@@ -27,21 +30,20 @@ public class ExcelParser {
 		Set<String> sheetsNames = new LinkedHashSet();
 		// sheetsNames.addAll(Arrays.asList("General Data","Summary of qualifications","Experience","Certification","Education","Visited countries","Country list"));
 		sheetsNames.addAll(Arrays.asList("General Data",
-				"Summary of qualifications", "Experience"));
+				"Summary of qualifications", "Experience","Certification","Education","Visited countries"));
 		return (LinkedHashSet<String>) sheetsNames;
 	}
 
-	public void parseExcelToDatabase(String filenameTimestamp) {
+	public Integer parseExcelToDatabase(String filenameTimestamp) {
+		Integer id_last = 0;
+		Integer id_last_temp = 0;
 		try {
 			FileInputStream file;
 			file = new FileInputStream(new File(
-					"d:/Eclipse_Workspace_luna/upload/" + filenameTimestamp));
+					"d:/eclipse_workspace/upload/" + filenameTimestamp));
 
 			// Create Workbook instance holding reference to .xlsx file
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
-
-			Integer id_last = 0;
-			Integer id_last_temp = 0;
 
 			for (String sheetName : getSheetsNames()) {
 				// Get first/desired sheet from the workbook
@@ -53,29 +55,15 @@ public class ExcelParser {
 					if (id_last != 0) {
 						id_last_temp = id_last;
 					}
-					// Iterate through each rows one by one
-					/*
-					 * Iterator<Row> rowIterator = sheet.iterator(); while
-					 * (rowIterator.hasNext()) { Row row = rowIterator.next();
-					 * // For each row, iterate through all the columns
-					 * Iterator<Cell> cellIterator = row.cellIterator();
-					 * 
-					 * while (cellIterator.hasNext()) { Cell cell =
-					 * cellIterator.next();
-					 * 
-					 * // Check the cell type and format accordingly switch
-					 * (cell.getCellType()) { case Cell.CELL_TYPE_NUMERIC:
-					 * System.out.println(cell.getNumericCellValue()); break;
-					 * case Cell.CELL_TYPE_STRING:
-					 * System.out.println(cell.getStringCellValue()); break; } }
-					 * System.out.println(""); }
-					 */
 				}
 				file.close();
 			}
+			System.out.println("id_last_temp inside: " + id_last_temp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return id_last_temp;
 	}
 
 	public Integer parseExcelSheetToDatabase(XSSFSheet sheet, String sheetName,
@@ -388,16 +376,142 @@ public class ExcelParser {
 
 	public void parseExcelSheetCertToDatabase(XSSFSheet sheet,
 			Integer id_last_temp) {
+		JavaHelpUtils jhu = new JavaHelpUtils();
+		ArrayList<ArrayList<String>> certifications = new ArrayList<ArrayList<String>>();
+		Iterator<Row> rowIterator = sheet.iterator();
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			// For each row, iterate through all the columns
+			Iterator<Cell> cellIterator = row.cellIterator();
+			
+			ArrayList<String> certification_temp = new ArrayList<String>();
+			while (cellIterator.hasNext()) {
+				Cell cell = cellIterator.next();
+				String cellValue = cell.getStringCellValue();
+				if (!cellValue.equals("Certification name") && !cellValue.equals("Date") 
+						&& !cellValue.isEmpty()) {
+					certification_temp.add(cellValue);
+					//System.out.println(cell.getStringCellValue());
+				}
+			}
+			if(certification_temp.size()>0){
+				certifications.add((ArrayList<String>) jhu.deepClone(certification_temp));
+			}
+			certification_temp.clear();
+		}
+		
+		System.out.println(certifications);
+		
+		Certification cert = new Certification();
+		DBUtils dbu = new DBUtils();
+		for(ArrayList<String> certification : certifications){
+			cert.setCERT_NAME(certification.get(0));
+			cert.setCERT_DATE(certification.get(1));
+			
+			try {
+				dbu.insertCertification(cert, id_last_temp);
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return;
 	}
 
 	public void parseExcelSheetEducToDatabase(XSSFSheet sheet,
 			Integer id_last_temp) {
+		JavaHelpUtils jhu = new JavaHelpUtils();
+		ArrayList<ArrayList<String>> educations = new ArrayList<ArrayList<String>>();
+		Iterator<Row> rowIterator = sheet.iterator();
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			// For each row, iterate through all the columns
+			Iterator<Cell> cellIterator = row.cellIterator();
+			
+			ArrayList<String> education_temp = new ArrayList<String>();
+			while (cellIterator.hasNext()) {
+				Cell cell = cellIterator.next();
+				String cellValue = cell.getStringCellValue();
+				if (!cellValue.equals("Diploma") && !cellValue.equals("Educational center") && !cellValue.equals("Period") 
+						&& !cellValue.isEmpty()) {
+					education_temp.add(cellValue);
+					//System.out.println(cell.getStringCellValue());
+				}
+			}
+			if(education_temp.size()>0){
+				educations.add((ArrayList<String>) jhu.deepClone(education_temp));
+			}
+			education_temp.clear();
+		}
+		
+		System.out.println(educations);
+		
+		Education educ = new Education();
+		DBUtils dbu = new DBUtils();
+		for(ArrayList<String> education : educations){
+			educ.setDIPLOMA(education.get(0));
+			educ.setEDUC_CENTER(education.get(1));
+			educ.setEDUC_PERIOD(education.get(2));
+			
+			try {
+				dbu.insertEducation(educ, id_last_temp);
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return;
 	}
 
 	public void parseExcelSheetVisCountToDatabase(XSSFSheet sheet,
 			Integer id_last_temp) {
+		JavaHelpUtils jhu = new JavaHelpUtils();
+		ArrayList<ArrayList<String>> vis_countries = new ArrayList<ArrayList<String>>();
+		Iterator<Row> rowIterator = sheet.iterator();
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			// For each row, iterate through all the columns
+			Iterator<Cell> cellIterator = row.cellIterator();
+			
+			ArrayList<String> vis_countries_temp = new ArrayList<String>();
+			while (cellIterator.hasNext()) {
+				Cell cell = cellIterator.next();
+				String cellValue = "";
+
+				switch (cell.getCellType()) 
+				{ case Cell.CELL_TYPE_NUMERIC:
+					cellValue = String.valueOf((int) cell.getNumericCellValue()); break;
+				case Cell.CELL_TYPE_STRING:
+					cellValue = cell.getStringCellValue(); break;
+				case Cell.CELL_TYPE_FORMULA:
+					cellValue = String.valueOf((int) cell.getNumericCellValue()); break;	} 
+				
+				if (!cellValue.equals("Visited countries IDs") && !cellValue.equals("Visited countries") 
+						&& !cellValue.isEmpty() && !cellValue.equals("0")) {
+					vis_countries_temp.add(cellValue);
+					//System.out.println(cell.getStringCellValue());
+				}
+			}
+			if(vis_countries_temp.size()>0){
+				vis_countries.add((ArrayList<String>) jhu.deepClone(vis_countries_temp));
+			}
+			vis_countries_temp.clear();
+		}
+		
+		System.out.println(vis_countries);
+		
+		Country ctr = new Country();
+		DBUtils dbu = new DBUtils();
+		for(ArrayList<String> vis_country : vis_countries){
+			ctr.setCOUNTRY_ID(vis_country.get(0));
+			ctr.setCOUNTRY_NAME(vis_country.get(1));
+			
+			try {
+				dbu.insertVisitedCountries(ctr, id_last_temp);
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return;
 	}
 

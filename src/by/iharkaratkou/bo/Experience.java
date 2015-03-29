@@ -1,10 +1,19 @@
 package by.iharkaratkou.bo;
 
-public class Experience {
+import java.io.Serializable;
+
+public class Experience implements Serializable{
+	String ID;
 	String POSITION;
 	String COMPANY;
 	String PERIOD;
 	
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
+	}
 	public String getPOSITION() {
 		return POSITION;
 	}

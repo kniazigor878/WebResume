@@ -1,5 +1,4 @@
 use web_resume;
-delete from COUNTRIES;
 delete from EDUCATIONS;
 delete from EXP_ACTIVITIES;
 delete from EXPERIENCES;

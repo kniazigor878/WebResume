@@ -1,0 +1,10 @@
+Sub GetAddressFromShapeHyperlink()
+Dim myCell As Range
+Dim oSh As Shape
+
+For Each oSh In ActiveSheet.Shapes
+    With oSh.Hyperlink
+        oSh.TopLeftCell.Offset(RowOffset:=0, ColumnOffset:=4).Value = oSh.Hyperlink.Address
+    End With
+Next oSh
+End Sub
