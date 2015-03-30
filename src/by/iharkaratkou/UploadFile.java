@@ -27,7 +27,7 @@ public class UploadFile extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	String saveFile = "d:/eclipse_workspace/upload";
+	String saveFile = "d:/Eclipse_Workspace_luna/upload";
 
 	protected String processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

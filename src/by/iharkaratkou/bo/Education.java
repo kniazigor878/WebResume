@@ -6,6 +6,7 @@ public class Education implements Serializable {
 	String DIPLOMA;
 	String EDUC_CENTER;
 	String EDUC_PERIOD;
+	
 	public String getDIPLOMA() {
 		return DIPLOMA;
 	}

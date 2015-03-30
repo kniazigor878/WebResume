@@ -166,7 +166,7 @@ public class Transformer {
 	
 	public ArrayList<Country> getVisCountriesFromQuery(ArrayList<ArrayList<byte[]>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getEducationsFromQuery: " + queryResult);
+		System.out.println("inside getVisCountriesFromQuery: " + queryResult);
 		ArrayList<Country> vis_countries = new ArrayList<Country>();
 		Country vis_countries_temp = new Country();
 		

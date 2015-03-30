@@ -237,7 +237,7 @@ public class FlagDownloader {
 				byte[] response = out.toByteArray();
 
 				FileOutputStream fos = new FileOutputStream(
-						"d:/eclipse_workspace/upload/images/" + ctr.get(j.toString()) + ".gif");
+						"d:/Eclipse_Workspace_luna/upload/countries/" + ctr.get(j.toString()) + ".gif");
 				fos.write(response);
 				fos.close();
 			}
