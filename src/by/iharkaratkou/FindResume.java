@@ -72,7 +72,7 @@ public class FindResume extends HttpServlet {
 				educs = trans.getEducationsFromQuery(dbu.selectEducations(Integer.valueOf(personID)));
 				System.out.println("educs: " + educs.get(0).getDIPLOMA());
 				vis_countries = trans.getVisCountriesFromQuery(dbu.selectVisCountries(Integer.valueOf(personID)));
-				System.out.println("vis_countries: " + vis_countries.get(0).getFLAG() + " " + vis_countries.get(1).getFLAG() + vis_countries.get(2).getFLAG());
+				//System.out.println("vis_countries: " + vis_countries.get(0).getSTRFLAG() + " " + vis_countries.get(1).getSTRFLAG() + vis_countries.get(2).getSTRFLAG());
 				
 				request.setAttribute("gd", gd);
 				request.setAttribute("quals", quals);

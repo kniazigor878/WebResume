@@ -176,6 +176,7 @@ public class Transformer {
 		
 		for(ArrayList<byte[]> row : queryResult){
 			vis_countries_temp.setFLAG(row.get(FLAG));
+			vis_countries_temp.setSTRFLAG();
 
 			vis_countries.add((Country) jhu.deepClone(vis_countries_temp));
 		}

@@ -3,10 +3,13 @@ package by.iharkaratkou.bo;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 public class Country implements Serializable {
 	String COUNTRY_ID;
 	String COUNTRY_NAME;
 	byte[] FLAG;
+	String STRFLAG;
 	
 	public byte[] getFLAG() {
 		return FLAG;
@@ -25,5 +28,13 @@ public class Country implements Serializable {
 	}
 	public void setCOUNTRY_NAME(String cOUNTRY_NAME) {
 		COUNTRY_NAME = cOUNTRY_NAME;
+	}
+	public void setSTRFLAG()
+	{
+		STRFLAG = new String(Base64.encode(this.FLAG));
+	}
+	public String getSTRFLAG()
+	{
+		return STRFLAG;
 	}
 }

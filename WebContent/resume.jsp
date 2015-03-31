@@ -64,13 +64,15 @@
 	<div id="Countries">
 		<h3><c:out value = "Countries"/></h3>
 		<p class="additional_info">Countries where ${gd.getNAME()} managed onsite or remote projects:</p>
+		<div class="flags">
 		<c:forEach var="vis_countrie" items="${vis_countries}">
-			<img src="data:image/gif;base64," + Base64.encode(${vis_countrie.getFLAG() }) width="100" height="70" alt="Australia" title="Australia" class="flag" />
+			<img src="data:image/gif;base64,${vis_countrie.getSTRFLAG() }" width="100" height="70" alt="Australia" title="Australia" class="flag" />
 		</c:forEach>
+		</div>
 	</div>
 	<br><br>
 	<div id="Links">
-		<a href="http://${gd.getSN_LINKEDIN()}" target="_blank"><img src="../labels/linked.png" width="80" height="80" alt="View Profile on LinkedIn" title="View Profile on LinkedIn" class="noprint" /></a>
+		<a href="http://${gd.getSN_LINKEDIN()}" target="_blank"><img src="../labels/linked.png" width="80" height="80" alt="View Profile on LinkedIn" title="View Profile on LinkedIn" class="noprint"/></a>
 	    <a href="http://${gd.getSN_TWITTER()}" target="_blank"><img src="../labels/twitter.png" width="80" height="80" alt="Follow on Twitter" title="Follow on Twitter" class="noprint" /></a>
   	  	<a href="#" onClick="window.print()"><img src="../labels/print.png" width="80" height="80" alt="Print This Page" title="Print This Page" class="noprint" /></a>
 	</div>
