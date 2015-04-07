@@ -13,13 +13,14 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// output information
 	function Output(msg) {
-		var m = $id("messages");
+		var m = document.getElementById("messages");
 		m.innerHTML = msg + m.innerHTML;
 	}
 
 
 	// file drag hover
 	function FileDragHover(e) {
+		//alert("FileDragHover");
 		e.stopPropagation();
 		e.preventDefault();
 		e.target.className = (e.type == "dragover" ? "hover" : "");
@@ -28,7 +29,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// file selection
 	function FileSelectHandler(e) {
-		alert("FileSelectHandler(e)");
+		//alert("FileSelectHandler(e)");
 		// cancel event and hover styling
 		FileDragHover(e);
 
@@ -54,29 +55,29 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		);
 
 	}
-
+	
+	
 
 	// initialize
 	function Init() {
-		alert("inside init()");
-		var fileselect = $id("fileselect"),
-			filedrag = $id("filedrag"),
-			submitbutton = $id("submitbutton");
-		alert("1");
+		//alert("inside init()");
+		var fileselect = document.getElementById("fileselect");
+		var filedrag = document.getElementById("filedrag");
+		var	submitbutton = document.getElementById("submitbutton");
+		
+		//alert(fileselect);
+		//alert(filedrag);
+		//alert(submitbutton);
 		// file select
-		fileselect.addEventListener("change", FileSelectHandler(window.event), false);
-		alert("2");
+		fileselect.addEventListener("change", FileSelectHandler, false);
 		// is XHR2 available?
-		alert("3");
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload) {
-			alert("xhr.upload");
 			// file drop
 			filedrag.addEventListener("dragover", FileDragHover, false);
 			filedrag.addEventListener("dragleave", FileDragHover, false);
 			filedrag.addEventListener("drop", FileSelectHandler, false);
 			filedrag.style.display = "block";
-
 			// remove submit button
 			submitbutton.style.display = "none";
 		}else{
@@ -87,7 +88,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// call initialization file
 	if (window.File && window.FileList && window.FileReader) {
-		alert("init()");
+		//alert("init()");
 		Init();
 	}
 
