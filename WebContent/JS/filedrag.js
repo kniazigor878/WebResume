@@ -28,7 +28,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// file selection
 	function FileSelectHandler(e) {
-
+		alert("FileSelectHandler(e)");
 		// cancel event and hover styling
 		FileDragHover(e);
 
@@ -58,18 +58,19 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// initialize
 	function Init() {
-
+		alert("inside init()");
 		var fileselect = $id("fileselect"),
 			filedrag = $id("filedrag"),
 			submitbutton = $id("submitbutton");
-
+		alert("1");
 		// file select
-		fileselect.addEventListener("change", FileSelectHandler, false);
-
+		fileselect.addEventListener("change", FileSelectHandler(window.event), false);
+		alert("2");
 		// is XHR2 available?
+		alert("3");
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload) {
-
+			alert("xhr.upload");
 			// file drop
 			filedrag.addEventListener("dragover", FileDragHover, false);
 			filedrag.addEventListener("dragleave", FileDragHover, false);
@@ -78,12 +79,15 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 			// remove submit button
 			submitbutton.style.display = "none";
+		}else{
+			alert("not xhr.upload");
 		}
 
 	}
 
 	// call initialization file
 	if (window.File && window.FileList && window.FileReader) {
+		alert("init()");
 		Init();
 	}
 

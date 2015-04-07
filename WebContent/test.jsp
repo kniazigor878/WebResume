@@ -10,7 +10,7 @@
 	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<link rel="stylesheet" href="CSS/test.css">
+<link rel="stylesheet"  media="all" href="CSS/test.css">
 <script src="JS/test.js"></script>
 <script src="JS/filedrag.js"></script>
 </head>
@@ -50,12 +50,12 @@
 							<label for="fileselect">Files to upload:</label> <input
 								type="file" id="fileselect" name="fileselect[]"
 								multiple="multiple" />
-							<div id="filedrag">or drop files here</div>
+							<div id="filedrag">or drop files here</div>						
 						</div>
 
-						<div id="submitbutton">
+						<!-- <div id="submitbutton">
 							<button type="submit">Upload Files</button>
-						</div>
+						</div> -->
 
 					</fieldset>
 
