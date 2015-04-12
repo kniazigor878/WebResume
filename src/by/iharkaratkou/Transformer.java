@@ -12,6 +12,7 @@ import by.iharkaratkou.bo.Education;
 import by.iharkaratkou.bo.Exp_activity;
 import by.iharkaratkou.bo.Experience;
 import by.iharkaratkou.bo.GeneralData;
+import by.iharkaratkou.bo.Label;
 import by.iharkaratkou.bo.Qualifications;
 import by.iharkaratkou.javaUtils.JavaHelpUtils;
 
@@ -183,4 +184,25 @@ public class Transformer {
 		
 		return vis_countries;
 	}
+	
+	public ArrayList<Label> getLabelsFromQuery(ArrayList<ArrayList<byte[]>> queryResult) throws ClassNotFoundException, SQLException{
+		
+		System.out.println("inside getLabelsFromQuery: " + queryResult);
+		ArrayList<Label> labels = new ArrayList<Label>();
+		Label labels_temp = new Label();
+		
+		final Integer LABEL = 0;
+		
+		JavaHelpUtils jhu = new JavaHelpUtils();
+		
+		for(ArrayList<byte[]> row : queryResult){
+			labels_temp.setLABEL(row.get(LABEL));
+			labels_temp.setSTRLABEL();
+
+			labels.add((Label) jhu.deepClone(labels_temp));
+		}
+		
+		return labels;
+	}	
+	
 }

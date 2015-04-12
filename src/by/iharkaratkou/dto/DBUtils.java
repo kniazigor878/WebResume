@@ -1,5 +1,7 @@
 package by.iharkaratkou.dto;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,14 +35,14 @@ public class DBUtils {
 		return id;
 	}
 	
-	private boolean execInsert(Connection conn, String query) throws SQLException{	
+	private boolean execIUD(Connection conn, String query) throws SQLException{	
 		Statement statement = conn.createStatement();
 		int rowsNumber = statement.executeUpdate(query);
 		return (rowsNumber == 1)? true: false;
 	}
 	
-	
-	public Integer insertGeneralData(GeneralData gd) throws SQLException, ClassNotFoundException{
+
+	public Integer insertGeneralData(GeneralData gd,Integer id_last_temp) throws SQLException, ClassNotFoundException{
 		
 		boolean res = false;
 		Integer id = 0;
@@ -54,15 +56,35 @@ public class DBUtils {
 		String CurBusMail = gd.getCURRENT_BUSINESS_MAIL();
 		String LinkedIn = gd.getSN_LINKEDIN();
 		String Twitter = gd.getSN_TWITTER();
+		String Password = gd.getPASSWORD();
 		
 		Connection conn = this.getConnection();
 		
-		String insertQuery = "insert into general_data (NAME,SURNAME,CURRENT_POST,CURRENT_COMPANY,CURRENT_LOCATION,CURRENT_BUS_PHONE,CURRENT_BUSINESS_MAIL,SN_LINKEDIN,SN_TWITTER)"
-				+ " values ('"+ Name +"','"+ Surname +"','"+ CurPosition +"','"+ CurCompany +"','"+ CurLocation +"','"+ CurBusPhone +"','"+ CurBusMail +"','"+ LinkedIn +"','"+ Twitter +"')";
+		String insertQuery = "insert into general_data (NAME,SURNAME,CURRENT_POST,CURRENT_COMPANY,CURRENT_LOCATION,CURRENT_BUS_PHONE,CURRENT_BUSINESS_MAIL,SN_LINKEDIN,SN_TWITTER,PASSWORD)"
+				+ " values ('"+ Name +"','"+ Surname +"','"+ CurPosition +"','"+ CurCompany +"','"+ CurLocation +"','"+ CurBusPhone +"','"+ CurBusMail +"','"+ LinkedIn +"','"+ Twitter +"',sha1('"+ Password +"'))";
 		String idQuery = "SELECT LAST_INSERT_ID()";
-		
-		res = this.execInsert(conn, insertQuery);
-		id = this.execIDSelect(conn, idQuery);
+		System.out.println("1");
+		String deleteQuery = "delete from EDUCATIONS  where GEN_DAT_ID = '" + id_last_temp + "';"
+				+ "delete from EXP_ACTIVITIES where EXP_ID in (select EXP_ID from experiences WHERE GEN_DAT_ID = '" + id_last_temp + "');"
+				+ "delete from EXPERIENCES where GEN_DAT_ID = '" + id_last_temp + "';"
+				+ "delete from PERSON_COUNTRIES  where GEN_DAT_ID = '" + id_last_temp + "';"
+				+ "delete from PERSON_LABELS where GEN_DAT_ID = '" + id_last_temp + "';"
+				+ "delete from QUALIFICATIONS where GEN_DAT_ID = '" + id_last_temp + "';"
+				+ "delete from CERTIFICATIONS where GEN_DAT_ID = '" + id_last_temp + "';"
+				+ "delete from GENERAL_DATA where GEN_DAT_ID = '" + id_last_temp + "'";
+		System.out.println("2");
+		String updateQuery = "update general_data set NAME = '"+ Name +"', SURNAME = '"+ Surname +"', CURRENT_POST = '"+ CurPosition +"', CURRENT_COMPANY = '"+ CurCompany +"', CURRENT_LOCATION = '"+ CurLocation +"',CURRENT_BUS_PHONE = '"+ CurBusPhone +"', CURRENT_BUSINESS_MAIL = '"+ CurBusMail +"', SN_LINKEDIN = '"+ LinkedIn +"', SN_TWITTER = '"+ Twitter +"' where GEN_DAT_ID = '" + id_last_temp + "'";
+		if(id_last_temp != 0){
+			System.out.println("2.5");
+			res = this.execIUD(conn, deleteQuery);
+			System.out.println("3");
+			res = this.execIUD(conn, updateQuery);
+			System.out.println("4");
+			id = id_last_temp;
+		}else{
+			res = this.execIUD(conn, insertQuery);
+			id = this.execIDSelect(conn, idQuery);
+		}
 		
 		return id;
 	}
@@ -78,7 +100,7 @@ public class DBUtils {
 		
 		for(String qualification: qualifications){
 			String insertQuery = "insert into qualifications (GEN_DAT_ID,QUALIFICATION) values ('"+ id_last_temp.toString() +"','"+ qualification +"')";
-			res = this.execInsert(conn, insertQuery);
+			res = this.execIUD(conn, insertQuery);
 		}
 		
 		return;
@@ -98,7 +120,7 @@ public class DBUtils {
 		String insertQuery = "insert into experiences (GEN_DAT_ID,POSITION,COMPANY,PERIOD) values ('"+ id_last_temp.toString() +"','"+ Position +"','"+ Company +"','"+ Period +"')";
 		String idQuery = "SELECT LAST_INSERT_ID()";
 		
-		res = this.execInsert(conn, insertQuery);
+		res = this.execIUD(conn, insertQuery);
 		id = this.execIDSelect(conn, idQuery);
 		
 		return id;
@@ -116,7 +138,7 @@ public class DBUtils {
 		
 		for(String exp_activity: exp_activities){
 			String insertQuery = "insert into exp_activities (EXP_ID,ACTIVITY) values ('"+ id_exp_temp.toString() +"','"+ exp_activity +"')";
-			res = this.execInsert(conn, insertQuery);
+			res = this.execIUD(conn, insertQuery);
 		}
 		
 		return;
@@ -133,7 +155,7 @@ public class DBUtils {
 		
 		String insertQuery = "insert into certifications (GEN_DAT_ID,CERT_NAME,CERT_DATE) values ('"+ id_last_temp.toString() +"','"+ Cert_name +"','"+ Date +"')";
 		
-		res = this.execInsert(conn, insertQuery);
+		res = this.execIUD(conn, insertQuery);
 		
 		return;
 	}
@@ -150,7 +172,7 @@ public class DBUtils {
 		
 		String insertQuery = "insert into educations (GEN_DAT_ID,DIPLOMA,EDUC_CENTER,EDUC_PERIOD) values ('"+ id_last_temp.toString() +"','"+ Diploma +"','"+ Educ_center +"','"+ Educ_period +"')";
 		
-		res = this.execInsert(conn, insertQuery);
+		res = this.execIUD(conn, insertQuery);
 		
 		return;
 	}
@@ -166,7 +188,24 @@ public class DBUtils {
 		
 		String insertQuery = "insert into person_countries (GEN_DAT_ID,COUNTRY_ID) values ('"+ id_last_temp.toString() +"','"+ Country_ID +"')";
 		
-		res = this.execInsert(conn, insertQuery);
+		res = this.execIUD(conn, insertQuery);
+		
+		return;
+	}
+	
+	public void insertLabel(FileInputStream fis, File file, Integer id_last_temp) throws SQLException, ClassNotFoundException{
+		
+		boolean res = false;
+		
+		Connection conn = this.getConnection();
+		
+		String insertQuery = "insert into person_labels (GEN_DAT_ID,LABEL) values ( ? , ? )";
+		PreparedStatement ps = conn.prepareStatement(insertQuery);
+		ps.setInt(1, id_last_temp);
+	    ps.setBinaryStream(2, fis, (int) file.length());
+	    ps.executeUpdate();
+	    //conn.commit();
+		//res = this.execIUD(conn, insertQuery);
 		
 		return;
 	}
@@ -257,6 +296,13 @@ public class DBUtils {
 		return queryResult;
 	}
 	
+	public ArrayList<ArrayList<byte[]>> selectLabels(Integer id_last_temp) throws SQLException, ClassNotFoundException{
+		ArrayList<ArrayList<byte[]>> queryResult = new ArrayList<ArrayList<byte[]>>();
+		String selectQuery = "select LABEL from person_labels WHERE GEN_DAT_ID = " + id_last_temp;
+		queryResult = this.execSelectBLOB(selectQuery);	
+		return queryResult;
+	}
+	
 /*	public boolean setActive(String id) throws SQLException, ClassNotFoundException{
 		
 		boolean res = false;
@@ -267,7 +313,7 @@ public class DBUtils {
 		
 		String updateQuery = "update myshop_customers set active = 'yes' where id = '"+ id +"'";
 		
-		res = this.execInsert(conn, updateQuery);
+		res = this.execIUD(conn, updateQuery);
 		
 		return res;
 	}*/

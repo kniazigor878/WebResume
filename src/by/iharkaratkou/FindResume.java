@@ -17,6 +17,7 @@ import by.iharkaratkou.bo.Education;
 import by.iharkaratkou.bo.Exp_activity;
 import by.iharkaratkou.bo.Experience;
 import by.iharkaratkou.bo.GeneralData;
+import by.iharkaratkou.bo.Label;
 import by.iharkaratkou.bo.Qualifications;
 import by.iharkaratkou.dto.DBUtils;
 
@@ -58,6 +59,7 @@ public class FindResume extends HttpServlet {
 				ArrayList<Certification> certs = new ArrayList<Certification>();
 				ArrayList<Education> educs = new ArrayList<Education>();
 				ArrayList<Country> vis_countries = new ArrayList<Country>();
+				ArrayList<Label> labels = new ArrayList<Label>(); 
 				
 				gd = trans.getGeneralDataFromQuery(dbu.selectGeneralData(Integer.valueOf(personID)));
 				System.out.println("gd: " + gd.getNAME() + gd.getSURNAME());
@@ -73,6 +75,7 @@ public class FindResume extends HttpServlet {
 				System.out.println("educs: " + educs.get(0).getDIPLOMA());
 				vis_countries = trans.getVisCountriesFromQuery(dbu.selectVisCountries(Integer.valueOf(personID)));
 				//System.out.println("vis_countries: " + vis_countries.get(0).getSTRFLAG() + " " + vis_countries.get(1).getSTRFLAG() + vis_countries.get(2).getSTRFLAG());
+				labels = trans.getLabelsFromQuery(dbu.selectLabels(Integer.valueOf(personID)));
 				
 				request.setAttribute("gd", gd);
 				request.setAttribute("quals", quals);
@@ -81,6 +84,7 @@ public class FindResume extends HttpServlet {
 				request.setAttribute("certs", certs);
 				request.setAttribute("educs", educs);
 				request.setAttribute("vis_countries", vis_countries);
+				request.setAttribute("labels", labels);
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/resume.jsp");
 				rd.forward(request, response);

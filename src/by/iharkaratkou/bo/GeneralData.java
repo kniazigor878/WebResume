@@ -11,7 +11,14 @@ public class GeneralData {
 	private String CURRENT_BUSINESS_MAIL;
 	private String SN_LINKEDIN;
 	private String SN_TWITTER;
+	private String PASSWORD;
 	
+	public String getPASSWORD() {
+		return PASSWORD;
+	}
+	public void setPASSWORD(String pASSWORD) {
+		PASSWORD = pASSWORD;
+	}
 	public Integer getGEN_DATA_ID() {
 		return GEN_DATA_ID;
 	}

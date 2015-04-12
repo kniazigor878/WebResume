@@ -21,6 +21,7 @@
 			<li><a href="#tabs-2">Modify existing resume</a></li>
 		</ul>
 		<div id="tabs-1">
+		<form name="form1" action="TestServlet" method="post"  enctype="multipart/form-data">
 			<div class="downl_templ">
 				<p class="center">
 					Download WebResume template: <a
@@ -48,13 +49,13 @@
 
 						<div>
 							<label for="fileselect">Files to upload:</label> <input
-								type="file" id="fileselect" name="fileselect[]"
-								multiple="multiple" />
-							<div id="filedrag">or drop files here</div>						
+									type="file" id="fileselect" name="fileselect[]"
+									multiple="multiple"/>
+								<div id="filedrag">or drop files here</div>						
 						</div>
 
 						<div id="submitbutton">
-							<button type="submit">Upload Files</button>
+							<button type="submit" name="hidden_button">Upload Files</button>
 						</div>
 
 					</fieldset>
@@ -65,13 +66,15 @@
 
 				</div>
 				<p class="center">
-					<input type="submit" value="Generate WebResume" /><br> <br>
+					<input type="submit" name="show_button" value="Generate WebResume" /><br> <br>
 					Your WebResume ID is:
 				</p>
 				<p>* - mandatory fields</p>
 			</div>
+			</form>
 		</div>
 		<div id="tabs-2">
+		<form name="form2" action="TestServlet" method="post">
 			<p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus
 				gravida ante, ut pharetra massa metus id nunc. Duis scelerisque
 				molestie turpis. Sed fringilla, massa eget luctus malesuada, metus
@@ -83,6 +86,7 @@
 				convallis. Maecenas feugiat, tellus pellentesque pretium posuere,
 				felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris
 				consectetur tortor et purus.</p>
+			</form>	
 		</div>
 	</div>
 <script src="JS/filedrag.js"></script>	

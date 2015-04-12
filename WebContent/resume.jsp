@@ -60,6 +60,11 @@
 	<div id="Clients">
 		<h3><c:out value = "Clients"/></h3>
 		<p class="additional_info">Some clients ${gd.getNAME()} had a pleasure working with:</p>
+		<div class="Client_labels">
+		<c:forEach var="label" items="${labels}">
+			<img src="data:image/png;base64,${label.getSTRLABEL() }" width="100" height="70" alt="Australia" title="Australia" class="flag" />
+		</c:forEach>
+		</div>
 	</div>
 	<div id="Countries">
 		<h3><c:out value = "Countries"/></h3>

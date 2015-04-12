@@ -34,13 +34,16 @@ public class ExcelParser {
 		return (LinkedHashSet<String>) sheetsNames;
 	}
 
-	public Integer parseExcelToDatabase(String filenameTimestamp) {
+	public Integer parseExcelToDatabase(String webID, String filenameTimestamp, String webPass, boolean newWebResume) {
 		Integer id_last = 0;
 		Integer id_last_temp = 0;
+		//Check insert of update
+		if (!webID.equals("")) id_last_temp = Integer.valueOf(webID);
+		
 		try {
 			FileInputStream file;
 			file = new FileInputStream(new File(
-					"d:/Eclipse_Workspace_luna/upload/" + filenameTimestamp));
+					"d:/eclipse_workspace/upload/" + filenameTimestamp));
 
 			// Create Workbook instance holding reference to .xlsx file
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -51,7 +54,7 @@ public class ExcelParser {
 
 				if (sheet != null) {
 					id_last = parseExcelSheetToDatabase(sheet, sheetName,
-							id_last_temp);
+							id_last_temp, webPass);
 					if (id_last != 0) {
 						id_last_temp = id_last;
 					}
@@ -67,13 +70,13 @@ public class ExcelParser {
 	}
 
 	public Integer parseExcelSheetToDatabase(XSSFSheet sheet, String sheetName,
-			Integer id_last_temp) {
+			Integer id_last_temp,String webPass) {
 
 		Integer id_last = 0;
 
 		switch (sheetName) {
 		case "General Data":
-			id_last = parseExcelSheetGenDataToDatabase(sheet);
+			id_last = parseExcelSheetGenDataToDatabase(sheet, id_last_temp, webPass);
 			break;
 		case "Summary of qualifications":
 			parseExcelSheetSumOfQualToDatabase(sheet, id_last_temp);
@@ -94,7 +97,7 @@ public class ExcelParser {
 		return id_last;
 	}
 
-	public Integer parseExcelSheetGenDataToDatabase(XSSFSheet sheet) {
+	public Integer parseExcelSheetGenDataToDatabase(XSSFSheet sheet, Integer id_last_temp, String webPass) {
 		boolean isName = false;
 		boolean isSurname = false;
 		boolean isCurPosition = false;
@@ -194,11 +197,12 @@ public class ExcelParser {
 		gd.setCURRENT_BUSINESS_MAIL(CurBusMail);
 		gd.setSN_LINKEDIN(LinkedIn);
 		gd.setSN_TWITTER(Twitter);
+		gd.setPASSWORD(webPass);
 
 		DBUtils dbu = new DBUtils();
 		Integer gdID = 0;
 		try {
-			gdID = dbu.insertGeneralData(gd);
+			gdID = dbu.insertGeneralData(gd,id_last_temp);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
