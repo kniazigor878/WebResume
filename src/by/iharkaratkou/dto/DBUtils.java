@@ -73,10 +73,23 @@ public class DBUtils {
 				+ "delete from CERTIFICATIONS where GEN_DAT_ID = '" + id_last_temp + "';"
 				+ "delete from GENERAL_DATA where GEN_DAT_ID = '" + id_last_temp + "'";
 		System.out.println("2");
+		Statement stmt = conn.createStatement();
+		stmt.addBatch("delete from EDUCATIONS  where GEN_DAT_ID = '" + id_last_temp + "'");
+		stmt.addBatch("delete from EXP_ACTIVITIES where EXP_ID in (select EXP_ID from experiences WHERE GEN_DAT_ID = '" + id_last_temp + "')");
+		stmt.addBatch("delete from EXPERIENCES where GEN_DAT_ID = '" + id_last_temp + "'");
+		stmt.addBatch("delete from PERSON_COUNTRIES  where GEN_DAT_ID = '" + id_last_temp + "'");
+		stmt.addBatch("delete from PERSON_LABELS where GEN_DAT_ID = '" + id_last_temp + "'");
+		stmt.addBatch("delete from QUALIFICATIONS where GEN_DAT_ID = '" + id_last_temp + "'");
+		stmt.addBatch("delete from CERTIFICATIONS where GEN_DAT_ID = '" + id_last_temp + "'");
+		//stmt.addBatch("delete from GENERAL_DATA where GEN_DAT_ID = '" + id_last_temp + "'");
+
+		
+		
 		String updateQuery = "update general_data set NAME = '"+ Name +"', SURNAME = '"+ Surname +"', CURRENT_POST = '"+ CurPosition +"', CURRENT_COMPANY = '"+ CurCompany +"', CURRENT_LOCATION = '"+ CurLocation +"',CURRENT_BUS_PHONE = '"+ CurBusPhone +"', CURRENT_BUSINESS_MAIL = '"+ CurBusMail +"', SN_LINKEDIN = '"+ LinkedIn +"', SN_TWITTER = '"+ Twitter +"' where GEN_DAT_ID = '" + id_last_temp + "'";
 		if(id_last_temp != 0){
-			System.out.println("2.5");
-			res = this.execIUD(conn, deleteQuery);
+			System.out.println(deleteQuery);
+			//res = this.execIUD(conn, deleteQuery);
+			stmt.executeBatch();
 			System.out.println("3");
 			res = this.execIUD(conn, updateQuery);
 			System.out.println("4");

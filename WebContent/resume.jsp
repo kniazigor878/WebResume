@@ -62,7 +62,7 @@
 		<p class="additional_info">Some clients ${gd.getNAME()} had a pleasure working with:</p>
 		<div class="Client_labels">
 		<c:forEach var="label" items="${labels}">
-			<img src="data:image/png;base64,${label.getSTRLABEL() }" width="100" height="70" alt="Australia" title="Australia" class="flag" />
+			<img src="data:image/png;base64,${label.getSTRLABEL() }" width="200" height="140" alt="Australia" title="Australia" class="flag" />
 		</c:forEach>
 		</div>
 	</div>
@@ -77,9 +77,9 @@
 	</div>
 	<br><br>
 	<div id="Links">
-		<a href="http://${gd.getSN_LINKEDIN()}" target="_blank"><img src="../labels/linked.png" width="80" height="80" alt="View Profile on LinkedIn" title="View Profile on LinkedIn" class="noprint"/></a>
-	    <a href="http://${gd.getSN_TWITTER()}" target="_blank"><img src="../labels/twitter.png" width="80" height="80" alt="Follow on Twitter" title="Follow on Twitter" class="noprint" /></a>
-  	  	<a href="#" onClick="window.print()"><img src="../labels/print.png" width="80" height="80" alt="Print This Page" title="Print This Page" class="noprint" /></a>
+		<a href="http://${gd.getSN_LINKEDIN()}" target="_blank"><img src="../labels/linked.png" width="80" height="80" alt="View Profile on LinkedIn" title="View Profile on LinkedIn" class="flag"/></a>
+	    <a href="http://${gd.getSN_TWITTER()}" target="_blank"><img src="../labels/twitter.png" width="80" height="80" alt="Follow on Twitter" title="Follow on Twitter" class="flag" /></a>
+  	  	<a href="#" onClick="window.print()"><img src="../labels/print.png" width="80" height="80" alt="Print This Page" title="Print This Page" class="flag" /></a>
 	</div>
 </div>
 </body>

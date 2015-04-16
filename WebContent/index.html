@@ -9,6 +9,7 @@
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <link rel="stylesheet"  media="all" href="CSS/test.css">
 <script src="JS/test.js"></script>
+<script src="JS/InputValidation.js"></script>
 <!-- <script src="JS/filedrag.js"></script> -->
 </head>
 <body>
@@ -18,7 +19,7 @@
 			<li><a href="#tabs-2">Modify existing resume</a></li>
 		</ul>
 		<div id="tabs-1">
-		<form name="form1" action="UploadFile" method="post"  enctype="multipart/form-data">
+		<form name="form1" action="UploadFile" method="post"  enctype="multipart/form-data" onSubmit="return validateInsertInput()">
 			<div class="downl_templ">
 				<p class="center">
 					Download WebResume template: <a
@@ -28,13 +29,13 @@
 
 				<p>
 					1) Upload resume*: <input type="file" value="Upload resume:"
-						name="file" />
+						name="file" id = "file_form1"/>
 				</p>
 				<p>
-					2) Set password*: <input type="password" name="password" />
+					2) Set password*: <input type="password" name="password" id = "password_form1"/>
 				</p>
 				<p>
-					Confirm password*: <input type="password" name="conf_password" />
+					Confirm password*: <input type="password" name="conf_password" id = "conf_password_form1"/>
 				</p>
 				<p>3) Upload company labels:</p>
 				<div>
@@ -71,7 +72,7 @@
 			</form>
 		</div>
 		<div id="tabs-2">
-		<form name="form2" action="UploadFile" method="post"  enctype="multipart/form-data">
+		<form name="form2" action="UploadFile" method="post"  enctype="multipart/form-data" onSubmit="return validateUpdateInput()">
 			<div class="downl_templ">
 				<p class="center">
 					Download WebResume template: <a
@@ -81,13 +82,13 @@
 
 				<p>
 					1) Upload resume*: <input type="file" value="Upload resume:"
-						name="file" />
+						name="file" id = "file_form2"/>
 				</p>
 				<p>
-					2) WebResume ID*: <input type="text" name="web_id" />
+					2) WebResume ID*: <input type="text" name="web_id" id = "web_id_form2"/>
 				</p>
 				<p>
-					3) WebResume password*: <input type="password" name="password" />
+					3) WebResume password*: <input type="password" name="password" id = "password_form2"/>
 				</p>
 				<p>4) Upload company labels (new labels will erase old ones):</p>
 				<div>
