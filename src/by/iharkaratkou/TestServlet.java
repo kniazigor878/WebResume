@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,10 +22,12 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
+import by.iharkaratkou.dto.DBUtils;
+
 /**
  * Servlet implementation class TestServlet
  */
-@WebServlet("/TestServlet")
+@WebServlet("/TestServlet/*")
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -112,16 +115,35 @@ public class TestServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		 String text = "some text Ihar";
+		 String url = request.getRequestURL().toString();
+		 System.out.println("url " + url);
+		 String[] urlParts = url.split("/");
+		 String id = urlParts[5];
+		 System.out.println("id " + id);
+		 
+		 DBUtils dbu = new DBUtils();
+		 Integer isIDexist = 0;
+		 try {
+			 isIDexist = dbu.checkID(Integer.valueOf(id));
+			 System.out.println("isIDexist " + isIDexist);
+		} catch (NumberFormatException | ClassNotFoundException | SQLException e) {
+			
+			e.printStackTrace();
+		}
+		 System.out.println("isIDexist " + isIDexist);
+		    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
+		    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
+		    response.getWriter().write(isIDexist.toString());       // Write response body.
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doPost");
+		/*System.out.println("doPost");
 		String filenameTimestamp = processRequest(request, response);
-		System.out.println("filenameTimestamp: " + filenameTimestamp);
+		System.out.println("filenameTimestamp: " + filenameTimestamp);*/
 	}
 
 }

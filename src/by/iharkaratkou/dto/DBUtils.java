@@ -316,6 +316,17 @@ public class DBUtils {
 		return queryResult;
 	}
 	
+	public Integer checkID(Integer id_last_temp) throws SQLException, ClassNotFoundException{
+		ArrayList<ArrayList<String>> queryResult = new ArrayList<ArrayList<String>>();
+		String selectQuery = "select count(*) from general_data WHERE GEN_DAT_ID = " + id_last_temp;
+		queryResult = this.execSelect(selectQuery);	
+		Integer isIDexist = 0;
+		if(queryResult.size() > 0){
+			isIDexist = 1;
+		}
+		return isIDexist;
+	}
+	
 /*	public boolean setActive(String id) throws SQLException, ClassNotFoundException{
 		
 		boolean res = false;
