@@ -14,7 +14,7 @@ public class LabelsUploader {
 		
 		try {
 			for (String labelName : labels) {
-				File file  = new File("d:/Eclipse_Workspace_luna/upload/" + labelName);			
+				File file  = new File("d:/eclipse_workspace/upload/" + labelName);			
 				FileInputStream fis = new FileInputStream(file);
 				dbu.insertLabel(fis,file,id_last_temp);
 				

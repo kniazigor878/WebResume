@@ -28,7 +28,7 @@ public class UploadFile extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	String saveFile = "d:/Eclipse_Workspace_luna/upload";
+	String saveFile = "d:/eclipse_workspace/upload";
 	String webPass = "";
 	String webID = "";
 	String genOrUpd = "";

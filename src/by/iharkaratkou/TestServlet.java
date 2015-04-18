@@ -121,20 +121,27 @@ public class TestServlet extends HttpServlet {
 		 String[] urlParts = url.split("/");
 		 String id = urlParts[5];
 		 System.out.println("id " + id);
+		 String password = urlParts[6];
+		 System.out.println("password " + password);
 		 
 		 DBUtils dbu = new DBUtils();
 		 Integer isIDexist = 0;
+		 Integer isPasswordCorrect = 0;
 		 try {
 			 isIDexist = dbu.checkID(Integer.valueOf(id));
-			 System.out.println("isIDexist " + isIDexist);
+			 if(isIDexist > 0){
+				 isPasswordCorrect = dbu.checkPassword(Integer.valueOf(id), password);
+			 }
+			 //System.out.println("isIDexist " + isIDexist);
 		} catch (NumberFormatException | ClassNotFoundException | SQLException e) {
 			
 			e.printStackTrace();
 		}
 		 System.out.println("isIDexist " + isIDexist);
+		 System.out.println("isPasswordCorrect " + isPasswordCorrect);
 		    response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
 		    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-		    response.getWriter().write(isIDexist.toString());       // Write response body.
+		    response.getWriter().write(isIDexist.toString() + isPasswordCorrect.toString());       // Write response body.
 	}
 
 	/**

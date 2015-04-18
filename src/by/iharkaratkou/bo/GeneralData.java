@@ -13,6 +13,10 @@ public class GeneralData {
 	private String SN_TWITTER;
 	private String PASSWORD;
 	
+	public String getNAME_CAMEL_CASE() {
+		return NAME.substring(0, 1) + NAME.toLowerCase().substring(1, NAME.length());
+	}
+	
 	public String getPASSWORD() {
 		return PASSWORD;
 	}

@@ -318,13 +318,26 @@ public class DBUtils {
 	
 	public Integer checkID(Integer id_last_temp) throws SQLException, ClassNotFoundException{
 		ArrayList<ArrayList<String>> queryResult = new ArrayList<ArrayList<String>>();
-		String selectQuery = "select count(*) from general_data WHERE GEN_DAT_ID = " + id_last_temp;
+		String selectQuery = "select GEN_DAT_ID from general_data WHERE GEN_DAT_ID = " + id_last_temp;
 		queryResult = this.execSelect(selectQuery);	
+		System.out.println(queryResult);
 		Integer isIDexist = 0;
 		if(queryResult.size() > 0){
 			isIDexist = 1;
 		}
 		return isIDexist;
+	}
+	
+	public Integer checkPassword(Integer id_last_temp, String password) throws SQLException, ClassNotFoundException{
+		ArrayList<ArrayList<String>> queryResult = new ArrayList<ArrayList<String>>();
+		String selectQuery = "select GEN_DAT_ID from general_data WHERE PASSWORD = sha1('" + password + "') and GEN_DAT_ID = " + id_last_temp;
+		queryResult = this.execSelect(selectQuery);	
+		System.out.println(queryResult);
+		Integer isPasswordCorrect = 0;
+		if(queryResult.size() > 0){
+			isPasswordCorrect = 1;
+		}
+		return isPasswordCorrect;
 	}
 	
 /*	public boolean setActive(String id) throws SQLException, ClassNotFoundException{

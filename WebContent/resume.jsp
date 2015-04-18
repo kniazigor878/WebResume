@@ -59,7 +59,7 @@
 	<h2><c:out value = "Additional Information"/></h2>
 	<div id="Clients">
 		<h3><c:out value = "Clients"/></h3>
-		<p class="additional_info">Some clients ${gd.getNAME()} had a pleasure working with:</p>
+		<p class="additional_info">Some clients ${gd.getNAME_CAMEL_CASE()} had a pleasure working with:</p>
 		<div class="Client_labels">
 		<c:forEach var="label" items="${labels}">
 			<img src="data:image/png;base64,${label.getSTRLABEL() }" width="200" height="140" alt="Australia" title="Australia" class="flag" />
@@ -68,7 +68,7 @@
 	</div>
 	<div id="Countries">
 		<h3><c:out value = "Countries"/></h3>
-		<p class="additional_info">Countries where ${gd.getNAME()} managed onsite or remote projects:</p>
+		<p class="additional_info">Countries where ${gd.getNAME_CAMEL_CASE()} managed onsite or remote projects:</p>
 		<div class="flags">
 		<c:forEach var="vis_countrie" items="${vis_countries}">
 			<img src="data:image/gif;base64,${vis_countrie.getSTRFLAG() }" width="100" height="70" alt="Australia" title="Australia" class="flag" />

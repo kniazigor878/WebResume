@@ -20,7 +20,19 @@
 		if (!checkEmptyFields(emptyCheck)){
 			return false;
 			}else{
-				return checkPassword();
+				if (!checkPassword()){
+					return false;
+				}else{
+					var isIDAndPasswordCorrect = checkIDAndPassword();
+					//alert("before if" + isIDAndPasswordCorrect);
+					if(!isIDAndPasswordCorrect){
+						//alert("final false");
+						return false;
+					}else{
+						//alert("final true");
+						return true;
+					}
+				}
 			}
 	}	
 	
@@ -61,5 +73,34 @@
 		}
 		
 		
+	}
+	
+	function checkIDAndPassword(){
+		var resumeID = document.getElementById('web_id_form2').value;
+    	var resumePassword = document.getElementById('password_form2').value;
+    	//alert(resumeID);
+		//alert(resumePassword);
+		var result = false;
+    	// Locate HTML DOM element with ID "somebutton" and assign the following function to its "click" event...
+		$.ajaxSetup({async:false});
+		$.get('TestServlet/' + resumeID + '/' + resumePassword, function(responseText) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+            //$('#somediv').text(responseText);         // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+        	//alert(responseText);
+        	//alert(responseText.substr(0,1));
+        	//alert(responseText.substr(1,1));
+        	if(responseText.substr(0,1) == 0){
+        		alert("Your WebResume ID doesn't exist! Please white another one");
+        		result =  false;
+        	}else{
+        		if(responseText.substr(1,1) == 0){
+        			alert("Password doesn't match to existing WebResume");
+        			result =  false;
+        		}else{
+        			//alert("return true");
+        			result =  true;
+        		}
+        	}
+        });
+		return result;
 	}
 

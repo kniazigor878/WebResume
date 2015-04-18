@@ -12,9 +12,9 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 
 	// output information
-	function Output(msg) {
-		var m = document.getElementById("messages");
-		m.innerHTML = msg + m.innerHTML;
+	function Output(msg,formNameAuto) {
+		var m = document.getElementById("messages_" + formNameAuto);
+		m.innerHTML = m.innerHTML + msg;
 	}
 
 
@@ -31,6 +31,10 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 	function FileSelectHandler(e) {
 		//alert("FileSelectHandler(e)");
 		// cancel event and hover styling
+		var $form = $(this).closest('form');
+		//alert($form.attr('name'));
+		var formNameAuto = $form.attr('name');
+		//alert("inside FileSelectHandler " + formName);
 		FileDragHover(e);
 
 		// fetch FileList object
@@ -38,20 +42,20 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
-			ParseFile(f);
+			ParseFile(f,formNameAuto);
 		}
 
 	}
 
 
 	// output file information
-	function ParseFile(file) {
-
+	function ParseFile(file,formNameAuto) {
+		//alert("inside ParseFile " + formNameAuto);
+		
 		Output(
 			"<p>File information: <strong>" + file.name +
 			"</strong> type: <strong>" + file.type +
-			"</strong> size: <strong>" + file.size +
-			"</strong> bytes</p>"
+			"</strong></p>", formNameAuto
 		);
 
 	}
@@ -59,17 +63,19 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 	
 
 	// initialize
-	function Init() {
+	function Init(formName) {
 		//alert("inside init()");
-		var fileselect = document.getElementById("fileselect");
-		var filedrag = document.getElementById("filedrag");
-		var	submitbutton = document.getElementById("submitbutton");
+		//alert(formName);
+		var fileselect = document.getElementById("fileselect" + formName);
+		var filedrag = document.getElementById("filedrag" + formName);
+		//alert("1");
 		
 		//alert(fileselect);
 		//alert(filedrag);
 		//alert(submitbutton);
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);
+		//alert("2");
 		// is XHR2 available?
 		var xhr = new XMLHttpRequest();
 		if (xhr.upload) {
@@ -78,18 +84,17 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			filedrag.addEventListener("dragleave", FileDragHover, false);
 			filedrag.addEventListener("drop", FileSelectHandler, false);
 			filedrag.style.display = "block";
-			// remove submit button
-			submitbutton.style.display = "none";
 		}else{
 			alert("not xhr.upload");
 		}
-
+		//alert("3");
 	}
 
 	// call initialization file
 	if (window.File && window.FileList && window.FileReader) {
 		//alert("init()");
-		Init();
+		Init("_form1");
+		Init("_form2");
 	}
 
 
