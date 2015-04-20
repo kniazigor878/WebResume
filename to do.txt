@@ -1,0 +1,12 @@
++ 1) drag and drop
++ 2) logging (debug =1 , remove all out)
++ 3) path in properties file
+- 4) unit tests
++ 5) numeric sells
++ 6) comments
+- 7) maven
+- 8) move in internet
+- 9) tabs aligned
+- 10) UTF-8
+- 11) Tooltips
+- 12) Test different (empty) fields as input

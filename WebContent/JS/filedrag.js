@@ -67,7 +67,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		//alert("inside init()");
 		//alert(formName);
 		var fileselect = document.getElementById("fileselect" + formName);
-		var filedrag = document.getElementById("filedrag" + formName);
+		/*var filedrag = document.getElementById("filedrag" + formName);*/
 		//alert("1");
 		
 		//alert(fileselect);
@@ -75,9 +75,8 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		//alert(submitbutton);
 		// file select
 		fileselect.addEventListener("change", FileSelectHandler, false);
-		//alert("2");
 		// is XHR2 available?
-		var xhr = new XMLHttpRequest();
+		/*var xhr = new XMLHttpRequest();
 		if (xhr.upload) {
 			// file drop
 			filedrag.addEventListener("dragover", FileDragHover, false);
@@ -86,8 +85,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			filedrag.style.display = "block";
 		}else{
 			alert("not xhr.upload");
-		}
-		//alert("3");
+		}*/
 	}
 
 	// call initialization file

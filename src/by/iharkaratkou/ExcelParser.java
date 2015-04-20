@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -24,8 +25,38 @@ import by.iharkaratkou.bo.Qualifications;
 import by.iharkaratkou.dto.DBUtils;
 import by.iharkaratkou.javaUtils.JavaHelpUtils;
 
+/**
+ * This class contains methods which parse data on Excel sheets and call methods to write info
+ * in database.
+ * 
+ * @author Ihar Karatkou
+ * @version 1.0
+ * @since 2015-04-20
+ */
 public class ExcelParser {
-
+	
+	final static Logger logger = Logger.getLogger(ExcelParser.class);
+	
+	private String getExcelValue(Cell cell){
+		String cellValue = "";
+		switch (cell.getCellType())
+        {
+            case Cell.CELL_TYPE_NUMERIC:
+                cellValue = String.valueOf(cell.getNumericCellValue());
+            	//System.out.print(cell.getNumericCellValue() + "t");
+                break;
+            case Cell.CELL_TYPE_STRING:
+            	cellValue = cell.getStringCellValue();
+                //System.out.print(getExcelValue(cell) + "t");
+                break;
+            case Cell.CELL_TYPE_FORMULA:
+                cellValue = cell.getStringCellValue();
+            	//System.out.print(cell.getNumericCellValue() + "t");
+                break;    
+        }
+		return cellValue;
+	}
+	
 	public LinkedHashSet<String> getSheetsNames() {
 		Set<String> sheetsNames = new LinkedHashSet();
 		// sheetsNames.addAll(Arrays.asList("General Data","Summary of qualifications","Experience","Certification","Education","Visited countries","Country list"));
@@ -34,7 +65,7 @@ public class ExcelParser {
 		return (LinkedHashSet<String>) sheetsNames;
 	}
 
-	public Integer parseExcelToDatabase(String webID, String filenameTimestamp, String webPass, boolean newWebResume) {
+	public Integer parseExcelToDatabase(String webID, String filenameTimestamp, String webPass, boolean newWebResume, String saveFile) {
 		Integer id_last = 0;
 		Integer id_last_temp = 0;
 		//Check insert of update
@@ -42,8 +73,7 @@ public class ExcelParser {
 		
 		try {
 			FileInputStream file;
-			file = new FileInputStream(new File(
-					"d:/eclipse_workspace/upload/" + filenameTimestamp));
+			file = new FileInputStream(new File(saveFile + filenameTimestamp));
 
 			// Create Workbook instance holding reference to .xlsx file
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -61,9 +91,9 @@ public class ExcelParser {
 				}
 				file.close();
 			}
-			System.out.println("id_last_temp inside: " + id_last_temp);
+			logger.debug("id_last_temp inside: " + id_last_temp);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		
 		return id_last_temp;
@@ -127,35 +157,35 @@ public class ExcelParser {
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
 				if (isName) {
-					Name = cell.getStringCellValue();
+					Name = getExcelValue(cell);
 					isName = false;
 				} else if (isSurname) {
-					Surname = cell.getStringCellValue();
+					Surname = getExcelValue(cell);
 					isSurname = false;
 				} else if (isCurPosition) {
-					CurPosition = cell.getStringCellValue();
+					CurPosition = getExcelValue(cell);
 					isCurPosition = false;
 				} else if (isCurCompany) {
-					CurCompany = cell.getStringCellValue();
+					CurCompany = getExcelValue(cell);
 					isCurCompany = false;
 				} else if (isCurLocation) {
-					CurLocation = cell.getStringCellValue();
+					CurLocation = getExcelValue(cell);
 					isCurLocation = false;
 				} else if (isCurBusPhone) {
-					CurBusPhone = cell.getStringCellValue();
+					CurBusPhone = getExcelValue(cell);
 					isCurBusPhone = false;
 				} else if (isCurBusMail) {
-					CurBusMail = cell.getStringCellValue();
+					CurBusMail = getExcelValue(cell);
 					isCurBusMail = false;
 				} else if (isLinkedIn) {
-					LinkedIn = cell.getStringCellValue();
+					LinkedIn = getExcelValue(cell);
 					isLinkedIn = false;
 				} else if (isTwitter) {
-					Twitter = cell.getStringCellValue();
+					Twitter = getExcelValue(cell);
 					isTwitter = false;
 				}
 
-				switch (cell.getStringCellValue()) {
+				switch (getExcelValue(cell)) {
 				case "Name:":
 					isName = true;
 					break;
@@ -206,7 +236,7 @@ public class ExcelParser {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(gdID);
+		logger.debug("gdID: " + gdID);
 
 		return gdID;
 	}
@@ -222,11 +252,10 @@ public class ExcelParser {
 
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				String cellValue = cell.getStringCellValue();
+				String cellValue = getExcelValue(cell);
 				if (!cellValue.equals("Summary of qualifications:")
 						&& !cellValue.isEmpty()) {
 					qualifications.add(cellValue);
-					System.out.println(cell.getStringCellValue());
 				}
 			}
 		}
@@ -238,7 +267,7 @@ public class ExcelParser {
 		try {
 			dbu.insertQualifications(qual, id_last_temp);
 		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return;
@@ -248,7 +277,7 @@ public class ExcelParser {
 			Integer id_last_temp) {
 		ArrayList<Integer> id_exp = new ArrayList<Integer>();
 		id_exp = parseExcelSheetExpMainToDatabase(sheet, id_last_temp);
-		System.out.println(id_exp);
+		logger.debug("id_exp: " + id_exp);
 		parseExcelSheetExpActToDatabase(sheet, id_exp);
 		return;
 	}
@@ -271,15 +300,15 @@ public class ExcelParser {
 
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				if (isPosition && !cell.getStringCellValue().isEmpty()) {
-					Positions.add(cell.getStringCellValue());
-				} else if (isCompany && !cell.getStringCellValue().isEmpty()) {
-					Companies.add(cell.getStringCellValue());
-				} else if (isPeriod && !cell.getStringCellValue().isEmpty()) {
-					Periods.add(cell.getStringCellValue());
+				if (isPosition && !getExcelValue(cell).isEmpty()) {
+					Positions.add(getExcelValue(cell));
+				} else if (isCompany && !getExcelValue(cell).isEmpty()) {
+					Companies.add(getExcelValue(cell));
+				} else if (isPeriod && !getExcelValue(cell).isEmpty()) {
+					Periods.add(getExcelValue(cell));
 				}
 
-				switch (cell.getStringCellValue()) {
+				switch (getExcelValue(cell)) {
 				case "Position:":
 					isPosition = true;
 					break;
@@ -297,9 +326,9 @@ public class ExcelParser {
 			isPeriod = false;
 		}
 
-		System.out.println(Positions);
-		System.out.println(Companies);
-		System.out.println(Periods);
+		logger.debug("Positions: " + Positions);
+		logger.debug("Companies: " + Companies);
+		logger.debug("Periods: " + Periods);
 
 		DBUtils dbu = new DBUtils();
 		ArrayList<Integer> expIDs = new ArrayList<Integer>();
@@ -313,7 +342,7 @@ public class ExcelParser {
 			try {
 				expIDs.add(dbu.insertExperiences(exp, id_last_temp));
 			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 
 		}
@@ -335,13 +364,12 @@ public class ExcelParser {
 			Iterator<Cell> cellIterator = row.cellIterator();
 
 			while (cellIterator.hasNext()) {
-				Cell cell = cellIterator.next();
-				if (isActivity && !cell.getStringCellValue().isEmpty()) {
-					expActRow.add(cell.getStringCellValue());
-					// System.out.println(cell.getStringCellValue());
+				Cell cell = cellIterator.next();			
+				if (isActivity && !getExcelValue(cell).isEmpty()) {
+					expActRow.add(getExcelValue(cell));
 				}
 
-				switch (cell.getStringCellValue()) {
+				switch (getExcelValue(cell)) {
 				case "Activity:":
 					isActivity = true;
 					break;
@@ -355,7 +383,7 @@ public class ExcelParser {
 			expActRow.clear();
 		}
 
-		System.out.println(expAct);
+		logger.debug("expAct: " + expAct);
 
 		for (int i = 0; i < expAct.get(0).size(); i++) {
 			Exp_activity exp_act = new Exp_activity();
@@ -371,7 +399,7 @@ public class ExcelParser {
 			try {
 				dbu.insertExperienceActivities(exp_act, id_exp.get(i));
 			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 
@@ -391,11 +419,10 @@ public class ExcelParser {
 			ArrayList<String> certification_temp = new ArrayList<String>();
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				String cellValue = cell.getStringCellValue();
+				String cellValue = getExcelValue(cell);
 				if (!cellValue.equals("Certification name") && !cellValue.equals("Date") 
 						&& !cellValue.isEmpty()) {
 					certification_temp.add(cellValue);
-					//System.out.println(cell.getStringCellValue());
 				}
 			}
 			if(certification_temp.size()>0){
@@ -404,7 +431,7 @@ public class ExcelParser {
 			certification_temp.clear();
 		}
 		
-		System.out.println(certifications);
+		logger.debug("certifications: " + certifications);
 		
 		Certification cert = new Certification();
 		DBUtils dbu = new DBUtils();
@@ -415,7 +442,7 @@ public class ExcelParser {
 			try {
 				dbu.insertCertification(cert, id_last_temp);
 			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 		
@@ -435,11 +462,10 @@ public class ExcelParser {
 			ArrayList<String> education_temp = new ArrayList<String>();
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
-				String cellValue = cell.getStringCellValue();
+				String cellValue = getExcelValue(cell);
 				if (!cellValue.equals("Diploma") && !cellValue.equals("Educational center") && !cellValue.equals("Period") 
 						&& !cellValue.isEmpty()) {
 					education_temp.add(cellValue);
-					//System.out.println(cell.getStringCellValue());
 				}
 			}
 			if(education_temp.size()>0){
@@ -448,7 +474,7 @@ public class ExcelParser {
 			education_temp.clear();
 		}
 		
-		System.out.println(educations);
+		logger.debug("educations: " + educations);
 		
 		Education educ = new Education();
 		DBUtils dbu = new DBUtils();
@@ -486,14 +512,13 @@ public class ExcelParser {
 				{ case Cell.CELL_TYPE_NUMERIC:
 					cellValue = String.valueOf((int) cell.getNumericCellValue()); break;
 				case Cell.CELL_TYPE_STRING:
-					cellValue = cell.getStringCellValue(); break;
+					cellValue = getExcelValue(cell); break;
 				case Cell.CELL_TYPE_FORMULA:
 					cellValue = String.valueOf((int) cell.getNumericCellValue()); break;	} 
 				
 				if (!cellValue.equals("Visited countries IDs") && !cellValue.equals("Visited countries") 
 						&& !cellValue.isEmpty() && !cellValue.equals("0")) {
 					vis_countries_temp.add(cellValue);
-					//System.out.println(cell.getStringCellValue());
 				}
 			}
 			if(vis_countries_temp.size()>0){
@@ -502,7 +527,7 @@ public class ExcelParser {
 			vis_countries_temp.clear();
 		}
 		
-		System.out.println(vis_countries);
+		logger.debug("vis_countries: " + vis_countries);
 		
 		Country ctr = new Country();
 		DBUtils dbu = new DBUtils();
@@ -513,7 +538,7 @@ public class ExcelParser {
 			try {
 				dbu.insertVisitedCountries(ctr, id_last_temp);
 			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 		return;

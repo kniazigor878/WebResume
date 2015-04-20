@@ -2,6 +2,7 @@ package by.iharkaratkou.javaUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.AbstractMap;
@@ -11,9 +12,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
+import by.iharkaratkou.FindResume;
+
+/**
+ * This class contains methods to make easy some routines (generally cloning).
+ * 
+ * @author Ihar Karatkou
+ * @version 1.0
+ * @since 2015-04-20
+ */
 public class JavaHelpUtils {
+	final static Logger logger = Logger.getLogger(JavaHelpUtils.class);
+	
 	/**
 	 * This method makes a "deep clone" of any Java object it is given.
 	 */
@@ -27,7 +42,7 @@ public class JavaHelpUtils {
 	     return ois.readObject();
 	   }
 	   catch (Exception e) {
-	     e.printStackTrace();
+	     logger.error(e);
 	     return null;
 	   }
 	 }
@@ -47,4 +62,5 @@ public class JavaHelpUtils {
 		}
 		return lastEntry;
 	}
+
 }

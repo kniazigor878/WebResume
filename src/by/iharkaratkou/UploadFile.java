@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,19 +23,57 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
+import by.iharkaratkou.javaUtils.JavaHelpUtils;
+
+/**
+ * This class upload received files in special folder, calls method to parse and write
+ * received info in database and open link to render new/updated WebResume
+ * 
+ * @author Ihar Karatkou
+ * @version 1.0
+ * @since 2015-04-20
+*/
 @WebServlet("/UploadFile")
 public class UploadFile extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	final static Logger logger = Logger.getLogger(UploadFile.class);
 
-	String saveFile = "d:/eclipse_workspace/upload";
 	String webPass = "";
 	String webID = "";
 	String genOrUpd = "";
-
+	
+	/**
+	 * This method search uploadFolder path in properties file and return it.
+	 * 
+	 * @return uploadFolder
+	 */
+	private String getUploadPath(){
+		Properties prop = new Properties();
+		try {
+			prop.load(getServletContext().getResourceAsStream("/WEB-INF/variables.properties"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//prop.getProperty("uploadFolder");
+		return prop.getProperty("uploadFolder");
+	}
+	
+	/**
+	 * This method uploads received from html-form files and returns List of its names. Also it sets
+	 * webPass, webID and action (insert/update) from html-form.
+	 * @param request
+	 * @param response
+	 * @param saveFile
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public ArrayList<String> processRequest(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+			HttpServletResponse response, String saveFile) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		ArrayList<String> filenameTimestamps = new ArrayList<String>();
@@ -73,8 +112,7 @@ public class UploadFile extends HttpServlet {
 							continue;
 						}
 						String filename = FilenameUtils.getName(itemname);
-						System.out.println(filename);
-						File f = checkExist(filename);
+						File f = checkExist(filename,saveFile);
 						item.write(f);
 						filenameTimestamps.add(f.getName());
 					}
@@ -82,29 +120,36 @@ public class UploadFile extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-
+			logger.error(e);
 		} finally {
 			out.close();
 		}
 		return filenameTimestamps;
 	}
-
-	private File checkExist(String fileName) {
-		File f = new File(saveFile + "/" + fileName);
-		// File f = new File("d:\\eclipse_workspace\\upload\\LICENSE");
-		System.out.println("fileName: " + saveFile + "/" + fileName);
-		System.out.println("f.exists(): " + f.exists());
-
+	
+	/**
+	 * This method check if file with name = fileName exists in folder saveFile and if it exists
+	 *  - adds timestamp to fileName.
+	 *   
+	 * @param fileName
+	 * @param saveFile
+	 * @return File
+	 */
+	private File checkExist(String fileName, String saveFile) {
+		File f = new File(saveFile + fileName);
 		if (f.exists()) {
 			StringBuffer sb = new StringBuffer(fileName);
-			System.out.println("sb: " + sb);
 			sb.insert(sb.lastIndexOf("."), "-" + new Date().getTime());
-			f = new File(saveFile + "/" + sb.toString());
-			System.out.println("sb.toString(): " + sb.toString());
+			f = new File(saveFile + sb.toString());
 		}
 		return f;
 	}
-
+	
+	/**
+	 * This method open web-page in new tab by requested URI.
+	 *  
+	 * @param uri
+	 */
 	public static void openWebpage(URI uri) {
 		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop()
 				: null;
@@ -112,7 +157,7 @@ public class UploadFile extends HttpServlet {
 			try {
 				desktop.browse(uri);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}
@@ -122,12 +167,16 @@ public class UploadFile extends HttpServlet {
 		doPost(request,response);
 
 	}
-
+	
+	/**
+	 * This method handles POST requests, calls methods to write received data in database
+	 *  and open link with inserted/updated WebResume.
+	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doPost");
-		ArrayList<String> filenameTimestamps = processRequest(request, response);
-		System.out.println(filenameTimestamps);
+		String saveFile = getUploadPath(); 
+		ArrayList<String> filenameTimestamps = processRequest(request, response, saveFile);
+		logger.info("Uploaded file name is " + filenameTimestamps);
 		String resumeFile = "";
 		ArrayList<String> labels = new ArrayList<String>();
 		for (String filenameTimestamp: filenameTimestamps){
@@ -137,10 +186,10 @@ public class UploadFile extends HttpServlet {
 				labels.add(filenameTimestamp);
 			}
 		}
-		System.out.println(labels);
-		System.out.println("webPass: " + webPass);
-		System.out.println("webID: " + webID);
-		System.out.println("genOrUpd: " + genOrUpd);
+		logger.debug("array of labels: " + labels);
+		logger.debug("webID: " + webID);
+		logger.debug("webPass: " + webPass);
+		logger.debug("genOrUpd: " + genOrUpd);
 		
 		boolean newWebResume = true;
 		if(genOrUpd.equals("Generate WebResume")){
@@ -148,19 +197,21 @@ public class UploadFile extends HttpServlet {
 		}else if (genOrUpd.equals("Update WebResume")){
 			newWebResume = false;
 		}else{
-			System.out.println("Error in WebResume type");
+			logger.info("Error in WebResume type");
 		}
 		
 		ExcelParser exlParser = new ExcelParser();
-		Integer id_last_temp = exlParser.parseExcelToDatabase(webID,resumeFile,webPass,newWebResume);
+		Integer id_last_temp = exlParser.parseExcelToDatabase(webID,resumeFile,webPass,newWebResume,saveFile);
 		LabelsUploader lu = new LabelsUploader();
-		lu.uploadLabels(labels, id_last_temp);
-		URL myURL = new URL("http://localhost:8080/WebResume/FindResume/"
+		lu.uploadLabels(labels, id_last_temp, saveFile);
+		URL myURL = new URL(request.getRequestURL().toString().replaceAll("UploadFile", "FindResume/")
 				+ id_last_temp);
+		logger.debug("myURL: " + myURL);
 		try {
 			openWebpage(myURL.toURI());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

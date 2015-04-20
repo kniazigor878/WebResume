@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.iharkaratkou.bo.Certification;
 import by.iharkaratkou.bo.Country;
 import by.iharkaratkou.bo.Education;
@@ -27,6 +29,7 @@ import by.iharkaratkou.dto.DBUtils;
 @WebServlet("/FindResume/*")
 public class FindResume extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	final static Logger logger = Logger.getLogger(FindResume.class);
 
 	public static boolean isNumeric(String str) {
 		try {
@@ -45,7 +48,7 @@ public class FindResume extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String url = request.getRequestURL().toString();
 		String[] urlParts = url.split("/");
-		System.out.println("View: " + urlParts[urlParts.length - 1]);
+		logger.debug("View: " + urlParts[urlParts.length - 1]);
 		String personID = urlParts[urlParts.length - 1];
 		DBUtils dbu = new DBUtils();
 		Transformer trans = new Transformer();
@@ -62,19 +65,13 @@ public class FindResume extends HttpServlet {
 				ArrayList<Label> labels = new ArrayList<Label>(); 
 				
 				gd = trans.getGeneralDataFromQuery(dbu.selectGeneralData(Integer.valueOf(personID)));
-				System.out.println("gd: " + gd.getNAME() + gd.getSURNAME());
+				logger.debug("gd: " + gd.getNAME() + " " + gd.getSURNAME());
 				quals = trans.getQualificationsFromQuery(dbu.selectQualifications(Integer.valueOf(personID)));
-				System.out.println("quals: " + quals.getQualifications());
 				exps = trans.getExperiencesFromQuery(dbu.selectExperiences(Integer.valueOf(personID)));
-				System.out.println("exps: " + exps.get(0).getID() + exps.get(1).getID());
 				exp_acts = trans.getExperienceAcrivitiesFromQuery(dbu.selectExpActivities(Integer.valueOf(personID)));
-				System.out.println("exp_acts: " + exp_acts.get(0).getExp_ID() + exp_acts.get(1).getExp_ID());
 				certs = trans.getCertificationsFromQuery(dbu.selectCertificatins(Integer.valueOf(personID)));
-				System.out.println("certs: " + certs.get(0).getCERT_NAME());
 				educs = trans.getEducationsFromQuery(dbu.selectEducations(Integer.valueOf(personID)));
-				System.out.println("educs: " + educs.get(0).getDIPLOMA());
 				vis_countries = trans.getVisCountriesFromQuery(dbu.selectVisCountries(Integer.valueOf(personID)));
-				//System.out.println("vis_countries: " + vis_countries.get(0).getSTRFLAG() + " " + vis_countries.get(1).getSTRFLAG() + vis_countries.get(2).getSTRFLAG());
 				labels = trans.getLabelsFromQuery(dbu.selectLabels(Integer.valueOf(personID)));
 				
 				request.setAttribute("gd", gd);
@@ -90,10 +87,10 @@ public class FindResume extends HttpServlet {
 				rd.forward(request, response);
 				
 			} else {
-				System.out.println("Person ID is not a number");
+				logger.error("Person ID is not a number");
 			}
 		} catch (NumberFormatException | ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

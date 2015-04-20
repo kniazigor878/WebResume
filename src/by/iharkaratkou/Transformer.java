@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import by.iharkaratkou.bo.Certification;
 import by.iharkaratkou.bo.Country;
 import by.iharkaratkou.bo.Education;
@@ -14,12 +16,23 @@ import by.iharkaratkou.bo.Experience;
 import by.iharkaratkou.bo.GeneralData;
 import by.iharkaratkou.bo.Label;
 import by.iharkaratkou.bo.Qualifications;
+import by.iharkaratkou.dto.DBUtils;
 import by.iharkaratkou.javaUtils.JavaHelpUtils;
 
+/**
+ * This class contains methods which transform select results from database into objects of data model.
+ * 
+ * @author Ihar Karatkou
+ * @version 1.0
+ * @since 2015-04-20
+ */
 public class Transformer {
+	
+	final static Logger logger = Logger.getLogger(Transformer.class);
+	
 	public GeneralData getGeneralDataFromQuery(ArrayList<ArrayList<String>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getGeneralDataFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		GeneralData gd = new GeneralData();
 		
 		final Integer NAME = 0;
@@ -49,7 +62,7 @@ public class Transformer {
 	
 	public Qualifications getQualificationsFromQuery(ArrayList<ArrayList<String>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getQualificationsFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		Qualifications quals = new Qualifications();
 		ArrayList<String> qualifications_temp = new ArrayList<String>();
 		
@@ -66,7 +79,7 @@ public class Transformer {
 	
 	public ArrayList<Experience> getExperiencesFromQuery(ArrayList<ArrayList<String>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getExperiencesFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		ArrayList<Experience> exps = new ArrayList<Experience>();
 		Experience exp_temp = new Experience();
 		
@@ -90,7 +103,7 @@ public class Transformer {
 	
 	public ArrayList<Exp_activity> getExperienceAcrivitiesFromQuery(ArrayList<ArrayList<String>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getExperienceAcrivitiesFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		ArrayList<Exp_activity> exp_acts = new ArrayList<Exp_activity>();
 		Exp_activity exp_act_id = new Exp_activity();
 		ArrayList<String> exp_acts_temp = new ArrayList<String>();
@@ -109,7 +122,6 @@ public class Transformer {
 				hmQueryResult.put(row.get(EXP_ID), (ArrayList<String>) jhu.deepClone(exp_acts_temp));
 				exp_acts_temp.clear();
 			}
-			System.out.println("hm: " + hmQueryResult);
 		}
 		
 		Set<String> kHmSet = hmQueryResult.keySet();
@@ -117,7 +129,6 @@ public class Transformer {
 			exp_act_id.setExp_ID(id);
 			exp_act_id.setExp_activities(hmQueryResult.get(id));
 			exp_acts.add((Exp_activity) jhu.deepClone(exp_act_id));
-			//System.out.println("size: " + exp_acts.size());
 		}
 		
 		return exp_acts;
@@ -125,7 +136,7 @@ public class Transformer {
 	
 	public ArrayList<Certification> getCertificationsFromQuery(ArrayList<ArrayList<String>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getCertificationsFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		ArrayList<Certification> certs = new ArrayList<Certification>();
 		Certification cert_temp = new Certification();
 		
@@ -145,7 +156,7 @@ public class Transformer {
 
 	public ArrayList<Education> getEducationsFromQuery(ArrayList<ArrayList<String>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getEducationsFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		ArrayList<Education> educs = new ArrayList<Education>();
 		Education educ_temp = new Education();
 		
@@ -167,7 +178,7 @@ public class Transformer {
 	
 	public ArrayList<Country> getVisCountriesFromQuery(ArrayList<ArrayList<byte[]>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getVisCountriesFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		ArrayList<Country> vis_countries = new ArrayList<Country>();
 		Country vis_countries_temp = new Country();
 		
@@ -187,7 +198,7 @@ public class Transformer {
 	
 	public ArrayList<Label> getLabelsFromQuery(ArrayList<ArrayList<byte[]>> queryResult) throws ClassNotFoundException, SQLException{
 		
-		System.out.println("inside getLabelsFromQuery: " + queryResult);
+		logger.debug("queryResult: " + queryResult);
 		ArrayList<Label> labels = new ArrayList<Label>();
 		Label labels_temp = new Label();
 		
