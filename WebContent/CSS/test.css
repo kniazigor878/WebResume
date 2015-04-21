@@ -7,12 +7,13 @@
     margin-right: auto;
     margin-top: auto;
     margin-bottom: auto;
-/*     border-style: solid;
+    /* border-style: solid;
     border-width: 1px; */
 }
 
 li {
 	width: 49%;
+	align: center;
 }
 a:link {
     color: #0000FF;
@@ -69,8 +70,5 @@ a:active {
 	visibility: hidden;
 }
 
-/* .downl_templ{
-	text-align:center;
-} */
 
 /* Note that jQuery UI CSS is loaded from Google's CDN in the "Add Resources" pane to the left.  Normally this would be done in your <head> */
