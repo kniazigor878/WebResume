@@ -306,6 +306,13 @@ public class DBUtils {
 		return queryResult;
 	}
 	
+	public ArrayList<ArrayList<String>> selectVisCountriesNames(Integer id_last_temp) throws SQLException, ClassNotFoundException{
+		ArrayList<ArrayList<String>> queryResult = new ArrayList<ArrayList<String>>();
+		String selectQuery = "select NAME from countries WHERE COUNTRY_ID IN (select COUNTRY_ID from person_countries WHERE GEN_DAT_ID = " + id_last_temp + ")";
+		queryResult = this.execSelect(selectQuery);	
+		return queryResult;
+	}
+	
 	public ArrayList<ArrayList<byte[]>> selectVisCountries(Integer id_last_temp) throws SQLException, ClassNotFoundException{
 		ArrayList<ArrayList<byte[]>> queryResult = new ArrayList<ArrayList<byte[]>>();
 		String selectQuery = "select FLAG from countries WHERE COUNTRY_ID IN (select COUNTRY_ID from person_countries WHERE GEN_DAT_ID = " + id_last_temp + ")";

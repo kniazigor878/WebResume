@@ -236,8 +236,8 @@ public class ExcelParser {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-		logger.debug("gdID: " + gdID);
-
+		logger.debug("gdID: " + gdID + " Name: " + Name + " Surname: " + Surname);
+		logger.debug("Игорь Коротков");
 		return gdID;
 	}
 

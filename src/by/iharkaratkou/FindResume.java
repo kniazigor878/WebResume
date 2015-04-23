@@ -71,7 +71,7 @@ public class FindResume extends HttpServlet {
 				exp_acts = trans.getExperienceAcrivitiesFromQuery(dbu.selectExpActivities(Integer.valueOf(personID)));
 				certs = trans.getCertificationsFromQuery(dbu.selectCertificatins(Integer.valueOf(personID)));
 				educs = trans.getEducationsFromQuery(dbu.selectEducations(Integer.valueOf(personID)));
-				vis_countries = trans.getVisCountriesFromQuery(dbu.selectVisCountries(Integer.valueOf(personID)));
+				vis_countries = trans.getVisCountriesFromQuery(dbu.selectVisCountriesNames(Integer.valueOf(personID)),dbu.selectVisCountries(Integer.valueOf(personID)));
 				labels = trans.getLabelsFromQuery(dbu.selectLabels(Integer.valueOf(personID)));
 				
 				request.setAttribute("gd", gd);

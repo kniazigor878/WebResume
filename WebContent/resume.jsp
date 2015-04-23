@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../CSS/resume.css" />
 </head>
@@ -62,7 +62,7 @@
 		<p class="additional_info">Some clients ${gd.getNAME_CAMEL_CASE()} had a pleasure working with:</p>
 		<div class="Client_labels">
 		<c:forEach var="label" items="${labels}">
-			<img src="data:image/png;base64,${label.getSTRLABEL() }" width="200" height="140" alt="Australia" title="Australia" class="flag" />
+			<img src="data:image/png;base64,${label.getSTRLABEL() }" width="200" height="140" alt="Company label" title="Company label" class="flag" />
 		</c:forEach>
 		</div>
 	</div>
@@ -70,8 +70,8 @@
 		<h3><c:out value = "Countries"/></h3>
 		<p class="additional_info">Countries where ${gd.getNAME_CAMEL_CASE()} managed onsite or remote projects:</p>
 		<div class="flags">
-		<c:forEach var="vis_countrie" items="${vis_countries}">
-			<img src="data:image/gif;base64,${vis_countrie.getSTRFLAG() }" width="100" height="70" alt="Australia" title="Australia" class="flag" />
+		<c:forEach var="vis_country" items="${vis_countries}">
+			<img src="data:image/gif;base64,${vis_country.getSTRFLAG() }" width="100" height="70" alt="${vis_country.getCOUNTRY_NAME() }" title="${vis_country.getCOUNTRY_NAME() }" class="flag" />
 		</c:forEach>
 		</div>
 	</div>

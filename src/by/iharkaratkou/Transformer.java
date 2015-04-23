@@ -176,19 +176,22 @@ public class Transformer {
 		return educs;
 	}
 	
-	public ArrayList<Country> getVisCountriesFromQuery(ArrayList<ArrayList<byte[]>> queryResult) throws ClassNotFoundException, SQLException{
+	public ArrayList<Country> getVisCountriesFromQuery( ArrayList<ArrayList<String>> queryResultNames, ArrayList<ArrayList<byte[]>> queryResult) throws ClassNotFoundException, SQLException{
 		
+		logger.debug("queryResult: " + queryResultNames);
 		logger.debug("queryResult: " + queryResult);
 		ArrayList<Country> vis_countries = new ArrayList<Country>();
 		Country vis_countries_temp = new Country();
 		
 		final Integer FLAG = 0;
+		final Integer NAME = 0;
 		
 		JavaHelpUtils jhu = new JavaHelpUtils();
 		
-		for(ArrayList<byte[]> row : queryResult){
-			vis_countries_temp.setFLAG(row.get(FLAG));
+		for(int i =0; i< queryResult.size(); i++){
+			vis_countries_temp.setFLAG(queryResult.get(i).get(FLAG));
 			vis_countries_temp.setSTRFLAG();
+			vis_countries_temp.setCOUNTRY_NAME(queryResultNames.get(i).get(NAME));
 
 			vis_countries.add((Country) jhu.deepClone(vis_countries_temp));
 		}

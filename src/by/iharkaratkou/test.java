@@ -15,8 +15,9 @@ public class test {
 	final static Logger logger = Logger.getLogger(test.class);
 	
 	public static void main(String[] args) {
-		test obj = new test();
-		obj.runMe("mkyong");
+		/*test obj = new test();
+		obj.runMe("mkyong");*/
+		System.out.println("Игорь Коротков");
 	}
 
 	private void runMe(String parameter){
