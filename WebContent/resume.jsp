@@ -23,6 +23,7 @@
 	</c:forEach>
 	</UL>
 </div>
+<c:if test="${exps.size() > 0 == true}">
 <div id="Experience">
 	<h2><c:out value = "Experience"/></h2>
 	<c:forEach var="exp" items="${exps}">
@@ -40,6 +41,9 @@
 		</c:forEach>
 	</c:forEach>
 </div>
+</c:if>
+
+<c:if test="${certs.size() > 0 == true}">
 <div id="Certifications">
 	<h2><c:out value = "Certification"/></h2>
 	<c:forEach var="cert" items="${certs}">
@@ -47,6 +51,8 @@
 		<p class="date"><c:out value = "${cert.getCERT_DATE()}"/></p>
 	</c:forEach>
 </div>
+</c:if>
+<c:if test="${educs.size() > 0 == true}">
 <div id="Educations">
 	<h2><c:out value = "Education"/></h2>
 	<c:forEach var="educ" items="${educs}">
@@ -55,8 +61,12 @@
 		<p class="date"><c:out value = "${educ.getEDUC_PERIOD()}"/></p>
 	</c:forEach>	
 </div>
+</c:if>
+
+<c:if test = "${labels.size() > 0 == true || vis_countries.size() > 0 == true}">
 <div id="Additional_info">
 	<h2><c:out value = "Additional Information"/></h2>
+	<c:if test = "${labels.size() > 0 == true}">
 	<div id="Clients">
 		<h3><c:out value = "Clients"/></h3>
 		<p class="additional_info">Some clients ${gd.getNAME_CAMEL_CASE()} had a pleasure working with:</p>
@@ -66,6 +76,8 @@
 		</c:forEach>
 		</div>
 	</div>
+	</c:if>
+	<c:if test = "${vis_countries.size() > 0 == true}">
 	<div id="Countries">
 		<h3><c:out value = "Countries"/></h3>
 		<p class="additional_info">Countries where ${gd.getNAME_CAMEL_CASE()} managed onsite or remote projects:</p>
@@ -75,12 +87,14 @@
 		</c:forEach>
 		</div>
 	</div>
+	</c:if>
 	<br><br>
-	<div id="Links">
+</div>
+</c:if>
+<div id="Links">
 		<a href="http://${gd.getSN_LINKEDIN()}" target="_blank"><img src="../labels/linked.png" width="80" height="80" alt="View Profile on LinkedIn" title="View Profile on LinkedIn" class="flag"/></a>
 	    <a href="http://${gd.getSN_TWITTER()}" target="_blank"><img src="../labels/twitter.png" width="80" height="80" alt="Follow on Twitter" title="Follow on Twitter" class="flag" /></a>
   	  	<a href="#" onClick="window.print()"><img src="../labels/print.png" width="80" height="80" alt="Print This Page" title="Print This Page" class="flag" /></a>
-	</div>
 </div>
 </body>
 </html>

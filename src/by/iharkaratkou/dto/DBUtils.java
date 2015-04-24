@@ -33,7 +33,7 @@ public class DBUtils {
 		Connection conn = null;
 		String login = "ihar";
 		String pass = "ihar";
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/web_resume",login,pass);
+		conn = DriverManager.getConnection("jdbc:mysql://localhost/web_resume?useUnicode=yes&characterEncoding=UTF-8",login,pass);
 		return conn;
 	}
 	
