@@ -105,7 +105,7 @@ public class DBUtils {
 			res = this.execIUD(conn, insertQuery);
 			id = this.execIDSelect(conn, idQuery);
 		}
-		
+		conn.close();
 		return id;
 	}
 	
@@ -122,7 +122,7 @@ public class DBUtils {
 			String insertQuery = "insert into qualifications (GEN_DAT_ID,QUALIFICATION) values ('"+ id_last_temp.toString() +"','"+ qualification +"')";
 			res = this.execIUD(conn, insertQuery);
 		}
-		
+		conn.close();
 		return;
 	}
 	
@@ -142,7 +142,7 @@ public class DBUtils {
 		
 		res = this.execIUD(conn, insertQuery);
 		id = this.execIDSelect(conn, idQuery);
-		
+		conn.close();
 		return id;
 	}
 	
@@ -160,7 +160,7 @@ public class DBUtils {
 			String insertQuery = "insert into exp_activities (EXP_ID,ACTIVITY) values ('"+ id_exp_temp.toString() +"','"+ exp_activity +"')";
 			res = this.execIUD(conn, insertQuery);
 		}
-		
+		conn.close();
 		return;
 	}
 	
@@ -176,7 +176,7 @@ public class DBUtils {
 		String insertQuery = "insert into certifications (GEN_DAT_ID,CERT_NAME,CERT_DATE) values ('"+ id_last_temp.toString() +"','"+ Cert_name +"','"+ Date +"')";
 		
 		res = this.execIUD(conn, insertQuery);
-		
+		conn.close();
 		return;
 	}
 	
@@ -193,7 +193,7 @@ public class DBUtils {
 		String insertQuery = "insert into educations (GEN_DAT_ID,DIPLOMA,EDUC_CENTER,EDUC_PERIOD) values ('"+ id_last_temp.toString() +"','"+ Diploma +"','"+ Educ_center +"','"+ Educ_period +"')";
 		
 		res = this.execIUD(conn, insertQuery);
-		
+		conn.close();
 		return;
 	}
 
@@ -209,7 +209,7 @@ public class DBUtils {
 		String insertQuery = "insert into person_countries (GEN_DAT_ID,COUNTRY_ID) values ('"+ id_last_temp.toString() +"','"+ Country_ID +"')";
 		
 		res = this.execIUD(conn, insertQuery);
-		
+		conn.close();
 		return;
 	}
 	
@@ -223,7 +223,8 @@ public class DBUtils {
 		PreparedStatement ps = conn.prepareStatement(insertQuery);
 		ps.setInt(1, id_last_temp);
 	    ps.setBinaryStream(2, fis, (int) file.length());
-	    ps.executeUpdate();		
+	    ps.executeUpdate();
+	    conn.close();
 		return;
 	}
 	
@@ -243,6 +244,7 @@ public class DBUtils {
 			
 			queryResultRow.clear();
 		}
+		conn.close();
 		return queryResult;
 	}
 	
@@ -261,6 +263,7 @@ public class DBUtils {
 			queryResult.add((ArrayList<byte[]>) queryResultRow.clone());
 			queryResultRow.clear();
 		}
+		conn.close();
 		return queryResult;
 	}
 	

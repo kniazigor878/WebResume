@@ -6,10 +6,10 @@
 + 6) comments
 - 7) maven
 - 8) move in internet
-- 9) tabs aligned
++ 9) tabs aligned
 + 10) UTF-8
 + 11) Tooltips
-- 12) Test different (empty) fields as input
+- 12) Test different (empty) fields as input. Unit tests
 - 13) get reed of test files
 - 14) DB backup
-- 15) Too many connections
++ 15) Too many connections

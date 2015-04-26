@@ -15,6 +15,7 @@
 	<p class= "contact_info"><c:out value = "${gd.getCURRENT_LOCATION()}"/><c:out value = " | "/><c:out value = "${gd.getCURRENT_BUS_PHONE()}"/><br>
 	<a href="mailto:${gd.getCURRENT_BUSINESS_MAIL()}"><c:out value = "${gd.getCURRENT_BUSINESS_MAIL()}"/></a></p>
 </div>
+<c:if test="${quals.getQualifications().size() > 0 == true}">
 <div id="Qualifications">
 	<h2><c:out value = "Summary of Qualifications"/></h2>
 	<UL>
@@ -23,6 +24,7 @@
 	</c:forEach>
 	</UL>
 </div>
+</c:if>
 <c:if test="${exps.size() > 0 == true}">
 <div id="Experience">
 	<h2><c:out value = "Experience"/></h2>

@@ -14,7 +14,11 @@ public class GeneralData {
 	private String PASSWORD;
 	
 	public String getNAME_CAMEL_CASE() {
-		return NAME.substring(0, 1) + NAME.toLowerCase().substring(1, NAME.length());
+		if(NAME.equals("") || NAME.equals(null)){
+			return "";
+		}else{
+			return NAME.substring(0, 1) + NAME.toLowerCase().substring(1, NAME.length());
+		}
 	}
 	
 	public String getPASSWORD() {
