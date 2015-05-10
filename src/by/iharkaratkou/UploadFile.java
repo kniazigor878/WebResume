@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -205,7 +206,7 @@ public class UploadFile extends HttpServlet {
 		LabelsUploader lu = new LabelsUploader();
 		lu.uploadLabels(labels, id_last_temp, saveFile);
 		URL myURL = new URL(request.getRequestURL().toString().replaceAll("UploadFile", "FindResume/")
-				+ id_last_temp);
+				+ id_last_temp + "?alert=yes");
 		logger.debug("myURL: " + myURL);
 		try {
 			openWebpage(myURL.toURI());

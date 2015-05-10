@@ -7,6 +7,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../CSS/resume.css" />
+<script>
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+function showInfo(){
+	var showAlert = getParameterByName('alert');
+	if(showAlert == 'yes'){
+		var url = window.location.href;
+		var webID = url.substring(url.lastIndexOf("/") + 1,url.indexOf("?"));
+		var customURL = url.substring(0,url.indexOf("?"));
+		alert("Your WebResume ID is " + webID + "! \nURL to your WebResume is: " + customURL);
+	}
+}
+
+window.onload = showInfo;
+</script>
 </head>
 <body>
 <div id="General_info">

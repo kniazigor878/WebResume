@@ -12,27 +12,12 @@ import by.iharkaratkou.javaUtils.JavaHelpUtils;
 
 public class test {
 	
-	final static Logger logger = Logger.getLogger(test.class);
+	//final static Logger logger = Logger.getLogger(test.class);
 	
 	public static void main(String[] args) {
-		/*test obj = new test();
-		obj.runMe("mkyong");*/
-		System.out.println("Игорь Коротков");
-	}
-
-	private void runMe(String parameter){
-		 
-		if(logger.isDebugEnabled()){
-			logger.debug("This is debug : " + parameter);
+		for(int i = 0; i<10 ;i++){
+			System.out.println(i);
+			assert(i<6);
 		}
- 
-		if(logger.isInfoEnabled()){
-			logger.info("This is info : " + parameter);
-		}
- 
-		logger.warn("This is warn : " + parameter);
-		logger.error("This is error : " + parameter);
-		logger.fatal("This is fatal : " + parameter);
- 
 	}
 }
